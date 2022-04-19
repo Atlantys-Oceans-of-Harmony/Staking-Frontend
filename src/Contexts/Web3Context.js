@@ -37,36 +37,68 @@ const NATIVE_CURRENCY = {
   decimals: 18,
 };
 const CHAIN_NAME = "Harmony Mainnet";
-const STAKING_CONTRACT_ADDRESS = "0x3d902f6447A0D4E61d65E863E7C2425D938cfEed";
-const LP_CONTRACT_ADDRESS = "0x3d902f6447A0D4E61d65E863E7C2425D938cfEed";
-const UNIVERSE_CONTRACT_ADDRESS = "0x3d902f6447A0D4E61d65E863E7C2425D938cfEed";
+const STAKING_CONTRACT_ADDRESS = "0xd3B0bAC866aFc43f2b376D71611bAf066980861B";
+const LP_CONTRACT_ADDRESS = "0x0D658ca6BCb02E455355a908E7F6D432b0359950";
+const UNIVERSE_CONTRACT_ADDRESS = "0xd2998765f004a3B40C65aF2f8FA90dBC81BF66c7";
 
 export const Web3Provider = (props) => {
   const [account, setAccount] = useState();
   const [signer, setSigner] = useState();
   const [correctChain, setCorrectChain] = useState();
   const [askSwitch, setAskSwitch] = useState(false);
-  const [stakingContract, setStakingContract] = useState();
   const [contractObjects, setContractObjects] = useState({});
 
   const functionsToExport = {};
 
   const onAccountsChanged = async (accounts) => {
     setAccount(accounts[0]);
-    // setAccount("0xaC7245b6031c0405fE00DF1033b97E966C5193b6");
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const _signer = provider.getSigner();
-
-    const _stakingContract = new ethers.Contract(
+    setSigner(_signer);
+  };
+  useEffect(() => {
+    const _signer =
+      signer || new ethers.providers.Web3Provider(window.ethereum, "any");
+    try {
+      _signer?.getChainId().then((val) => setCorrectChain(val === CHAIN_ID));
+    } catch (e) {
+      setCorrectChain(false);
+    }
+    const universeContract = new ethers.Contract(
+      UNIVERSE_CONTRACT_ADDRESS,
+      universeAbi,
+      _signer
+    );
+    const lpContract = new ethers.Contract(LP_CONTRACT_ADDRESS, lpAbi, _signer);
+    const stakingContract = new ethers.Contract(
       STAKING_CONTRACT_ADDRESS,
       stakingAbi,
       _signer
     );
 
-    setStakingContract(_stakingContract);
+    const _contractObjects = {
+      universeContract,
+      lpContract,
+      stakingContract,
+    };
 
-    setSigner(_signer);
-  };
+    setContractObjects(_contractObjects);
+  }, [signer]);
+
+  const [blockNumber, setBlockNumber] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (signer) {
+        new ethers.providers.Web3Provider(window.ethereum, "any")
+          .getBlockNumber()
+          .then((e) => {
+            setBlockNumber(e.toString());
+          });
+      }
+    }, 10000);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [signer]);
 
   const onChainChanged = async (chainID) => {
     await promptChain();
@@ -107,30 +139,8 @@ export const Web3Provider = (props) => {
     setSigner(_signer);
   };
 
-  useEffect(() => {
-    const _signer =
-      signer || new ethers.providers.Web3Provider(window.ethereum, "any");
-    try {
-      _signer?.getChainId().then((val) => setCorrectChain(val === CHAIN_ID));
-    } catch (e) {
-      setCorrectChain(false);
-    }
-    const universeContract = new ethers.Contract(UNIVERSE_CONTRACT_ADDRESS, universeAbi, _signer);
-    const lpContract = new ethers.Contract(LP_CONTRACT_ADDRESS, lpAbi, _signer);
-    const stakingContract = new ethers.Contract(STAKING_CONTRACT_ADDRESS, stakingAbi, _signer);
-
-    const _contractObjects = {
-      universeContract,
-      lpContract,
-      stakingContract,
-    }
-
-    setContractObjects(_contractObjects);
-  }, [signer]);
-
-  functionsToExport.connectWallet = async () => {
+  functionsToExport.connectWallet = async (defaultAccount = -1) => {
     const { ethereum } = window;
-
     if (ethereum) {
       await ethereum.request({ method: "eth_requestAccounts" });
       const accounts = await ethereum.request({ method: "eth_accounts" });
@@ -145,105 +155,137 @@ export const Web3Provider = (props) => {
       setSigner(_signer);
     }
   };
-  functionsToExport.getEarned = async ()=>{
+  functionsToExport.getEarned = async () => {
     try {
       console.log(account);
       const result = await contractObjects?.stakingContract?.earned(account);
       console.log(result);
-      return utils?.formatEther(result?.toString);
-
-  }
- 
-  catch (e) {
+      return utils?.formatEther(result?.toString());
+    } catch (e) {
       console.log(e);
-  }
-  }
-  functionsToExport.getReward = async ()=>{
+    }
+  };
+
+  functionsToExport.getReward = async () => {
     try {
-      toast(`Retreiving Tokens (Placing Transaction)`)
+      toast(`Retreiving Tokens (Placing Transaction)`);
       console.log(account);
       const result = await contractObjects?.stakingContract?.getReward();
-      toast(`Retreiving Tokens (Transaction Placed)`)
+      toast(`Retreiving Tokens (Transaction Placed)`);
       const newBattleId = await result.wait();
-      toast(`Tokens Retreived`)
+      toast(`Tokens Retreived`);
 
       return utils?.formatEther(result?.toString);
-
-  }
- 
-  catch (e) {
+    } catch (e) {
+      console.log(signer);
       console.log(e);
-  }
-  }
-  functionsToExport.stake = async (amount = 0)=>{
+    }
+  };
+  functionsToExport.stake = async (amount = 0) => {
     try {
-        amount = utils.parseEther(amount);
+      amount = utils.parseEther(amount);
 
-        const requiredAmount = BigNumber.from(amount)
+      const requiredAmount = BigNumber.from(amount);
 
-        console.log(requiredAmount.toString());
-        const availableBalance = await contractObjects?.lpContract.allowance(account,STAKING_CONTRACT_ADDRESS );
-        console.log(availableBalance.toString())
-        if (availableBalance.lt(requiredAmount)) {
-            toast(`Increasing Allowance for LP Tokens (Placing Transaction)`)
+      console.log(requiredAmount.toString());
+      const availableBalance = await contractObjects?.lpContract.allowance(
+        account,
+        STAKING_CONTRACT_ADDRESS
+      );
+      console.log(availableBalance.toString());
+      if (availableBalance.lt(requiredAmount)) {
+        toast(`Increasing Allowance for LP Tokens (Placing Transaction)`);
 
-            const increaseBal = await contractObjects?.arbTokenContract.increaseAllowance(STAKING_CONTRACT_ADDRESS, requiredAmount.mul(1));
-            const result = await increaseBal.wait()
+        const increaseBal =
+          await contractObjects?.arbTokenContract.increaseAllowance(
+            STAKING_CONTRACT_ADDRESS,
+            requiredAmount.mul(1)
+          );
+        const result = await increaseBal.wait();
+      }
+      toast(`Staking Tokens (Placing Transaction)`);
 
-        }
-        toast(`Staking Tokens (Placing Transaction)`)
-        
-        const newBattle = await contractObjects?.stakingContract?.stake(requiredAmount?.toString());
-        console.log(newBattle);
-        console.log(newBattle.value.toString());
-        toast(`Staking Tokens (Transaction Placed)`);
+      const newBattle = await contractObjects?.stakingContract?.stake(
+        requiredAmount?.toString()
+      );
+      console.log(newBattle);
+      console.log(newBattle.value.toString());
+      toast(`Staking Tokens (Transaction Placed)`);
 
-        const newBattleId = await newBattle.wait();
-        console.log(newBattleId);
-        toast("Tokens Staked!")
+      const newBattleId = await newBattle.wait();
+      console.log(newBattleId);
+      toast("Tokens Staked!");
+    } catch (e) {
+      toast.error(e?.data?.message || "Transaction Failed");
+      console.log(e);
     }
-    catch (e) {
-        toast.error(e?.data?.message || "Transaction Failed")
-        console.log(e);
-    }
-    
-  }
-
-  functionsToExport.withdraw = async (amount = 0)=>{
+  };
+  functionsToExport.withdraw = async (amount = 0) => {
     try {
-        const newBattle = await contractObjects?.stakingContract?.withdraw(utils.parseEther(amount.toString())?.toString());
-        console.log(newBattle);
-        console.log(newBattle.value.toString());
-        toast(`Withdrawing Tokens (Transaction Placed)`);
+      const newBattle = await contractObjects?.stakingContract?.withdraw(
+        utils.parseEther(amount.toString())?.toString()
+      );
+      console.log(newBattle);
+      console.log(newBattle.value.toString());
+      toast(`Withdrawing Tokens (Transaction Placed)`);
 
-        const newBattleId = await newBattle.wait();
-        console.log(newBattleId);
-        toast("Tokens Withdrawn!")
+      const newBattleId = await newBattle.wait();
+      console.log(newBattleId);
+      toast("Tokens Withdrawn!");
+    } catch (e) {
+      toast.error(e?.data?.message || "Transaction Failed");
+      console.log(e);
     }
-    catch (e) {
-        toast.error(e?.data?.message || "Transaction Failed")
-        console.log(e);
-    }
-    
-  }
-  functionsToExport.rewardPerToken = async ()=>{
+  };
+  functionsToExport.rewardPerToken = async () => {
     try {
-        const newBattle = await contractObjects?.stakingContract?.rewardPerToken();
-       return newBattle;
+      const newBattle =
+        await contractObjects?.stakingContract?.rewardPerToken();
+      return newBattle;
+    } catch (e) {
+      console.log(e);
     }
-    catch (e) {
+  };
+  functionsToExport.getTokensStaked = async () => {
+    try {
+      const result = await contractObjects?.stakingContract?.balances(account);
+      return utils?.formatEther(result.toString());
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  functionsToExport.getBalance = async () => {
+    try {
+      const result = await contractObjects?.lpContract?.balanceOf(account);
+      return utils?.formatEther(result.toString());
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  functionsToExport.approveStaking = async (amount = 0) => {
+    if (!isNaN(amount) && amount > 0) {
+      try {
+        const result = await contractObjects?.lpContract?.approve(
+          STAKING_CONTRACT_ADDRESS,
+          ethers?.utils?.parseEther(amount)
+        );
+        console.log(result);
+        const res = await result.wait();
+        console.log(res.status);
+        return res.status;
+      } catch (e) {
         console.log(e);
+      }
     }
-    
-  }
- 
+  };
 
   return (
     <Web3Context.Provider
       value={{
         account,
         ...functionsToExport,
-        stakingContract,
       }}
     >
       {props.children}

@@ -1,9 +1,78 @@
 import React from "react";
+import Web3Context from "../Contexts/Web3Context";
+import { useContext, useEffect, useState, Fragment } from "react";
+
 import Info from "../Components/Info";
 
-const StakingCard = () => {
+const StakingCard = React.memo(() => {
+  const {
+    account,
+    connectWallet,
+    getEarned,
+    getReward,
+    stake,
+    withdraw,
+    rewardPerToken,
+    getTokensStaked,
+    getBalance,
+    approveStaking,
+  } = useContext(Web3Context);
+
+  const [balance, setBalance] = useState("0.0");
+  const [tokensStaked, setTokensStaked] = useState("0.0");
+  const [reward, setReward] = useState("0.0");
+
+  useEffect(() => {
+    const fetchStuff = async () => {
+      const [_balance, _tokensStaked, _reward] = await Promise.all([
+        getBalance(),
+        getTokensStaked(),
+        getEarned(),
+      ]);
+      setBalance(parseFloat(_balance).toFixed(2));
+      setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
+      setReward(parseFloat(_reward).toFixed(2));
+    };
+    if (account) {
+      fetchStuff();
+    }
+  }, [account]);
+
+  const handleClaim = () => {
+    getReward().then(console.log);
+  };
+
   const Tabs = ({ color }) => {
     const [openTab, setOpenTab] = React.useState(2);
+    const [toStake, setToStake] = useState();
+    const [toUnstake, setToUnstake] = useState();
+    const [approved, setApproved] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const handleMaxStake = () => {
+      setToStake(balance);
+    };
+
+    const handleMaxUnstake = () => {
+      setToUnstake(tokensStaked);
+    };
+
+    const handleApprove = () => {
+      setLoading(true);
+      approveStaking(toStake).then((e) => {
+        if (e === 1) setApproved(true);
+        console.log(e);
+      });
+    };
+
+    const handleStake = () => {
+      stake(toStake).then(console.log);
+    };
+
+    const handleWithdraw = () => {
+      withdraw(toUnstake).then(console.log);
+    };
+
     return (
       <>
         <div className="flex flex-wrap mt-6">
@@ -64,24 +133,37 @@ const StakingCard = () => {
                     <input
                       className="mt-4 outline-0 focus:outline-1 text-xm outline-blue-600 bg-gray-900 p-2 w-full border border-blue-500"
                       placeholder="0.0"
+                      value={toStake}
+                      onChange={(e) => setToStake(e.target.value)}
                     ></input>
                     <div className="text-left text-sm mt-2 flex justify-between">
                       <div className="my-auto">
-                        <span className="text-blue-500">Available Token </span>
-                        <span className="ml-2 text-white-600">150 AQUA</span>
+                        <span className="text-blue-500">Available </span>
+                        <span className="ml-2 text-white-600">
+                          {balance} Tokens
+                        </span>
                       </div>
                       <div>
-                        <button class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0">
+                        <button
+                          class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
+                          onClick={handleMaxStake}
+                        >
                           <img src="./wallet.png" className="w-4 mr-1" />
                           Max
                         </button>
                       </div>
                     </div>
                     <div className="flex gap-5 mt-10 justify-center">
-                      <button class="font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">
-                        Approve
+                      <button
+                        class="font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
+                        onClick={handleApprove}
+                      >
+                        {loading ? "Approving..." : "Approve"}
                       </button>
-                      <button class="font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">
+                      <button
+                        class={`font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0`}
+                        onClick={handleStake}
+                      >
                         <img src="./wallet.png" className="w-5 mr-3" />
                         Stake
                       </button>
@@ -97,21 +179,31 @@ const StakingCard = () => {
                     <input
                       className="mt-4 outline-0 focus:outline-1 text-xm outline-blue-600 bg-gray-900 p-2 w-full border border-blue-500"
                       placeholder="0.0"
+                      value={toUnstake}
+                      onChange={(e) => setToUnstake(e.target.value)}
                     ></input>
                     <div className="text-left text-sm mt-2 flex justify-between">
                       <div className="my-auto">
-                        <span className="text-blue-500">Tokens Stake </span>
-                        <span className="ml-2 text-white-600">150 AQUA</span>
+                        <span className="text-blue-500">Staked</span>
+                        <span className="ml-2 text-white-600">
+                          {tokensStaked} Tokens
+                        </span>
                       </div>
                       <div>
-                        <button class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0">
+                        <button
+                          class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
+                          onClick={handleMaxUnstake}
+                        >
                           <img src="./wallet.png" className="w-4 mr-1" />
                           Max
                         </button>
                       </div>
                     </div>
                     <div className="flex gap-5 mt-10 justify-center">
-                      <button class="font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">
+                      <button
+                        class="font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
+                        onClick={handleWithdraw}
+                      >
                         <img src="./wallet.png" className="w-5 mr-3" />
                         Unstake
                       </button>
@@ -132,7 +224,7 @@ const StakingCard = () => {
         <div className="flex justify-between">
           <div className="flex">
             <img src="./aqua.png" className="w-7 h-7 mr-1" />
-            <div className="text-left text-xl font-bold">AQUA</div>
+            <div className="text-left text-xl font-bold">AQUA/ONE</div>
             <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
               APR ~%
             </div>
@@ -148,17 +240,19 @@ const StakingCard = () => {
               <div className="text-white font-bold text-left">
                 <span className="text-blue-500">Rewards </span>
               </div>
-              <div className="text-white font-bold text-left">
+              {/* <div className="text-white font-bold text-left">
                 <span className="text-blue-500">Liquidity </span>
-              </div>
+              </div> */}
               <div className="text-white font-bold text-left">
                 <span className="text-blue-500">Staked </span>
               </div>
             </div>
             <div className="flex-1 pt-5 flex flex-col gap-4">
-              <div className="text-white font-bold text-left">0.0</div>
-              <div className="text-white font-bold text-left">$ 300,000</div>
-              <div className="text-white font-bold text-left">$ 0.0</div>
+              <div className="text-white font-bold text-left">{reward}</div>
+              {/* <div className="text-white font-bold text-left">$ 300,000</div> */}
+              <div className="text-white font-bold text-left">
+                {tokensStaked}
+              </div>
             </div>
           </div>
 
@@ -172,11 +266,14 @@ const StakingCard = () => {
                 </div>
 
                 <div className="text-white text-center text-left mt-2 font-bold text-2xl">
-                  0.0000
+                  {reward}
                 </div>
 
                 <div className="mt-4">
-                  <button class="font-bold text-white inline-flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-sm my-2">
+                  <button
+                    class="font-bold text-white inline-flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-sm my-2"
+                    onClick={handleClaim}
+                  >
                     Claim
                   </button>
                 </div>
@@ -188,7 +285,7 @@ const StakingCard = () => {
       </div>
     </div>
   );
-};
+});
 
 export default function Staking() {
   return (
