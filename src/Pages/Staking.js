@@ -18,35 +18,14 @@ const StakingCard = () => {
     approveStaking,
     getTotalSupply,
     getRewardRate,
+    fetchStuff,
+    balance,
+    tokensStaked,
+    apr,
+    reward,
   } = useContext(Web3Context);
 
-  const [balance, setBalance] = useState("0.0");
-  const [tokensStaked, setTokensStaked] = useState("0.0");
-  const [reward, setReward] = useState("0.0");
-  const [apr, setApr] = useState("~");
   const [loadingState, setLoadingState] = useState(false);
-  const fetchStuff = async () => {
-    const [_balance, _tokensStaked, _reward, _totalSupply, _rewardRate] =
-      await Promise.all([
-        getBalance(),
-        getTokensStaked(),
-        getEarned(),
-        getTotalSupply(),
-        getRewardRate(),
-      ]);
-    setBalance(parseFloat(_balance).toFixed(2));
-    setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
-    setReward(parseFloat(_reward).toFixed(2));
-    console.log(_totalSupply);
-    console.log(_rewardRate);
-    const _apr = (_rewardRate * 365) / _totalSupply;
-    setApr(parseFloat(_apr).toFixed(2));
-  };
-  useEffect(() => {
-    if (account) {
-      fetchStuff();
-    }
-  }, [account]);
 
   function handleClaim() {
     setLoadingState(true);

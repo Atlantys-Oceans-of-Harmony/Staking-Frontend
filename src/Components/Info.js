@@ -21,28 +21,19 @@ export default function Info() {
     getTokensStaked,
     getBalance,
     approveStaking,
+    reward,
   } = useContext(Web3Context);
 
-  const [reward, setReward] = useState("0.0");
   const [loading, setLoading] = useState(false);
 
   function handleClaim() {
     setLoading(true);
     getReward().then(() => {
       getEarned().then((_reward) => {
-        setReward(parseFloat(_reward).toFixed(2));
         setLoading(false);
       });
     });
   }
-
-  useEffect(() => {
-    if (account) {
-      getEarned().then((_reward) => {
-        setReward(parseFloat(_reward).toFixed(2));
-      });
-    }
-  }, [account]);
 
   return (
     <div className=" bg-gradient-to-l from-cyan-500 to-blue-500 flex flex-col sm:flex-row py-10 justify-center px-5">
