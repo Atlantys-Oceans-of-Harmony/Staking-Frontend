@@ -4,7 +4,7 @@ import { useContext, useEffect, useState, Fragment } from "react";
 
 import Info from "../Components/Info";
 
-const StakingCard = React.memo(() => {
+const StakingCard = () => {
   const {
     account,
     connectWallet,
@@ -16,31 +16,44 @@ const StakingCard = React.memo(() => {
     getTokensStaked,
     getBalance,
     approveStaking,
+    getTotalSupply,
+    getRewardRate,
   } = useContext(Web3Context);
 
   const [balance, setBalance] = useState("0.0");
   const [tokensStaked, setTokensStaked] = useState("0.0");
   const [reward, setReward] = useState("0.0");
-
-  useEffect(() => {
-    const fetchStuff = async () => {
-      const [_balance, _tokensStaked, _reward] = await Promise.all([
+  const [apr, setApr] = useState("~");
+  const [loadingState, setLoadingState] = useState(false);
+  const fetchStuff = async () => {
+    const [_balance, _tokensStaked, _reward, _totalSupply, _rewardRate] =
+      await Promise.all([
         getBalance(),
         getTokensStaked(),
         getEarned(),
+        getTotalSupply(),
+        getRewardRate(),
       ]);
-      setBalance(parseFloat(_balance).toFixed(2));
-      setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
-      setReward(parseFloat(_reward).toFixed(2));
-    };
+    setBalance(parseFloat(_balance).toFixed(2));
+    setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
+    setReward(parseFloat(_reward).toFixed(2));
+    console.log(_totalSupply);
+    console.log(_rewardRate);
+    const _apr = (_rewardRate * 365) / _totalSupply;
+    setApr(parseFloat(_apr).toFixed(2));
+  };
+  useEffect(() => {
     if (account) {
       fetchStuff();
     }
   }, [account]);
 
-  const handleClaim = () => {
-    getReward().then(console.log);
-  };
+  function handleClaim() {
+    setLoadingState(true);
+    getReward().then(() => {
+      fetchStuff().then(setLoadingState(false));
+    });
+  }
 
   const Tabs = ({ color }) => {
     const [openTab, setOpenTab] = React.useState(2);
@@ -48,6 +61,7 @@ const StakingCard = React.memo(() => {
     const [toUnstake, setToUnstake] = useState();
     const [approved, setApproved] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [spinState, setSpinState] = useState(loadingState);
 
     const handleMaxStake = () => {
       setToStake(balance);
@@ -61,16 +75,36 @@ const StakingCard = React.memo(() => {
       setLoading(true);
       approveStaking(toStake).then((e) => {
         if (e === 1) setApproved(true);
+        setLoading(false);
         console.log(e);
       });
     };
 
     const handleStake = () => {
-      stake(toStake).then(console.log);
+      setLoadingState(true);
+      setSpinState(true);
+      stake(toStake).then(() => {
+        fetchStuff().then(() => {
+          setLoadingState(false);
+          setSpinState(false);
+        });
+      });
     };
 
     const handleWithdraw = () => {
-      withdraw(toUnstake).then(console.log);
+      setLoadingState(true);
+      setSpinState(true);
+      withdraw(toUnstake).then(() => {
+        fetchStuff().then(() => {
+          setLoadingState(false);
+          setSpinState(false);
+        });
+      });
+    };
+
+    const handleInputStake = (e) => {
+      const value = e.target.value.replace(/\+|-/gi, "");
+      setToStake(value);
     };
 
     return (
@@ -134,7 +168,12 @@ const StakingCard = React.memo(() => {
                       className="mt-4 outline-0 focus:outline-1 text-xm outline-blue-600 bg-gray-900 p-2 w-full border border-blue-500"
                       placeholder="0.0"
                       value={toStake}
-                      onChange={(e) => setToStake(e.target.value)}
+                      onChange={handleInputStake}
+                      onKeyPress={(event) => {
+                        if (!/[0-9]/.test(event.key)) {
+                          event.preventDefault();
+                        }
+                      }}
                     ></input>
                     <div className="text-left text-sm mt-2 flex justify-between">
                       <div className="my-auto">
@@ -158,14 +197,58 @@ const StakingCard = React.memo(() => {
                         class="font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
                         onClick={handleApprove}
                       >
-                        {loading ? "Approving..." : "Approve"}
+                        {loading ? (
+                          <svg
+                            role="status"
+                            class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                            viewBox="0 0 100 101"
+                            width={50}
+                            height={50}
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                              fill="currentColor"
+                            />
+                            <path
+                              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                              fill="currentFill"
+                            />
+                          </svg>
+                        ) : (
+                          "Approve"
+                        )}
                       </button>
                       <button
-                        class={`font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0`}
+                        class={`font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0 ${
+                          !approved && "opacity-50 cursor-not-allowed"
+                        }`}
                         onClick={handleStake}
                       >
-                        <img src="./wallet.png" className="w-5 mr-3" />
-                        Stake
+                        {spinState ? (
+                          <svg
+                            role="status"
+                            class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                            viewBox="0 0 100 101"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                              fill="currentColor"
+                            />
+                            <path
+                              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                              fill="currentFill"
+                            />
+                          </svg>
+                        ) : (
+                          <>
+                            <img src="./wallet.png" className="w-5 mr-3" />
+                            Stake
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -204,8 +287,31 @@ const StakingCard = React.memo(() => {
                         class="font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
                         onClick={handleWithdraw}
                       >
-                        <img src="./wallet.png" className="w-5 mr-3" />
-                        Unstake
+                        {loadingState ? (
+                          <svg
+                            role="status"
+                            class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                            viewBox="0 0 100 101"
+                            width={50}
+                            height={50}
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                              fill="currentColor"
+                            />
+                            <path
+                              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                              fill="currentFill"
+                            />
+                          </svg>
+                        ) : (
+                          <>
+                            <img src="./wallet.png" className="w-5 mr-3" />
+                            Unstake
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
@@ -226,7 +332,7 @@ const StakingCard = React.memo(() => {
             <img src="./aqua.png" className="w-7 h-7 mr-1" />
             <div className="text-left text-xl font-bold">AQUA/ONE</div>
             <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
-              APR ~%
+              APR {apr}%
             </div>
           </div>
 
@@ -274,7 +380,28 @@ const StakingCard = React.memo(() => {
                     class="font-bold text-white inline-flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-sm my-2"
                     onClick={handleClaim}
                   >
-                    Claim
+                    {loadingState ? (
+                      <svg
+                        role="status"
+                        class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                        viewBox="0 0 100 101"
+                        width={50}
+                        height={50}
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                          fill="currentFill"
+                        />
+                      </svg>
+                    ) : (
+                      "Claim"
+                    )}
                   </button>
                 </div>
               </div>
@@ -285,7 +412,7 @@ const StakingCard = React.memo(() => {
       </div>
     </div>
   );
-});
+};
 
 export default function Staking() {
   return (

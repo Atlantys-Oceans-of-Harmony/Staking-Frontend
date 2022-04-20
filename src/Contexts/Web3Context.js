@@ -85,21 +85,6 @@ export const Web3Provider = (props) => {
     setContractObjects(_contractObjects);
   }, [signer]);
 
-  const [blockNumber, setBlockNumber] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (signer) {
-        new ethers.providers.Web3Provider(window.ethereum, "any")
-          .getBlockNumber()
-          .then((e) => {
-            setBlockNumber(e.toString());
-          });
-      }
-    }, 10000);
-
-    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-  }, [signer]);
-
   const onChainChanged = async (chainID) => {
     await promptChain();
   };
@@ -159,7 +144,7 @@ export const Web3Provider = (props) => {
     try {
       console.log(account);
       const result = await contractObjects?.stakingContract?.earned(account);
-      console.log(result);
+      console.log(utils?.formatEther(result?.toString()));
       return utils?.formatEther(result?.toString());
     } catch (e) {
       console.log(e);
@@ -174,8 +159,8 @@ export const Web3Provider = (props) => {
       toast(`Retreiving Tokens (Transaction Placed)`);
       const newBattleId = await result.wait();
       toast(`Tokens Retreived`);
-
-      return utils?.formatEther(result?.toString);
+      console.log(result);
+      return result;
     } catch (e) {
       console.log(signer);
       console.log(e);
@@ -196,11 +181,10 @@ export const Web3Provider = (props) => {
       if (availableBalance.lt(requiredAmount)) {
         toast(`Increasing Allowance for LP Tokens (Placing Transaction)`);
 
-        const increaseBal =
-          await contractObjects?.arbTokenContract.increaseAllowance(
-            STAKING_CONTRACT_ADDRESS,
-            requiredAmount.mul(1)
-          );
+        const increaseBal = await contractObjects?.lpContract.increaseAllowance(
+          STAKING_CONTRACT_ADDRESS,
+          requiredAmount.mul(1)
+        );
         const result = await increaseBal.wait();
       }
       toast(`Staking Tokens (Placing Transaction)`);
@@ -278,6 +262,25 @@ export const Web3Provider = (props) => {
       } catch (e) {
         console.log(e);
       }
+    }
+  };
+  functionsToExport.getTotalSupply = async () => {
+    try {
+      const result = await contractObjects?.stakingContract?._totalSupply();
+      console.log(result);
+      return utils?.formatEther(result?.toString());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  functionsToExport.getRewardRate = async () => {
+    try {
+      const result = await contractObjects?.stakingContract?.rewardRate();
+      console.log(result);
+      return utils?.formatEther(result?.toString());
+    } catch (error) {
+      console.log(error);
     }
   };
 
