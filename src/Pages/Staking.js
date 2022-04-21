@@ -158,7 +158,7 @@ const StakingCard = () => {
                       <div className="my-auto">
                         <span className="text-blue-500">Available </span>
                         <span className="ml-2 text-white-600">
-                          {balance} Tokens
+                          {balance} AQUA-ONE LP
                         </span>
                       </div>
                       <div>
@@ -248,7 +248,7 @@ const StakingCard = () => {
                       <div className="my-auto">
                         <span className="text-blue-500">Staked</span>
                         <span className="ml-2 text-white-600">
-                          {tokensStaked} Tokens
+                          {tokensStaked} AQUA-ONE LP
                         </span>
                       </div>
                       <div>
