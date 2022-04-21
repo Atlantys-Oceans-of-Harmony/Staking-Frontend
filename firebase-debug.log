@@ -1,0 +1,13 @@
+[debug] [2022-04-21T20:03:57.437Z] ----------------------------------------------------------------------
+[debug] [2022-04-21T20:03:57.437Z] Command:       /opt/homebrew/Cellar/node/17.8.0/bin/node /opt/homebrew/bin/firebase deploy
+[debug] [2022-04-21T20:03:57.438Z] CLI Version:   10.6.0
+[debug] [2022-04-21T20:03:57.438Z] Platform:      darwin
+[debug] [2022-04-21T20:03:57.438Z] Node Version:  v17.8.0
+[debug] [2022-04-21T20:03:57.438Z] Time:          Fri Apr 22 2022 01:33:57 GMT+0530 (India Standard Time)
+[debug] [2022-04-21T20:03:57.439Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-04-21T20:03:57.468Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-04-21T20:03:57.468Z] > authorizing via signed-in user (anshumansingh64@gmail.com)
+[debug] [2022-04-21T20:03:57.468Z] [iam] checking project atlantys-staking for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-04-21T20:03:57.469Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/atlantys-staking:testIamPermissions [none]
+[debug] [2022-04-21T20:03:57.469Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/atlantys-staking:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}

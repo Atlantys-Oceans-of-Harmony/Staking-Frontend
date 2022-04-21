@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App bg-gray-900 flex flex-col">
       <Header />
-      <Staking />
+      {Staking()}
     </div>
   );
 }

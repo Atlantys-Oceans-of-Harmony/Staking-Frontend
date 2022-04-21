@@ -37,7 +37,7 @@ const NATIVE_CURRENCY = {
   decimals: 18,
 };
 const CHAIN_NAME = "Harmony Mainnet";
-const STAKING_CONTRACT_ADDRESS = "0xd3B0bAC866aFc43f2b376D71611bAf066980861B";
+const STAKING_CONTRACT_ADDRESS = "0x5401b3c3C431a769a79021f00B0ab9270e7D6DE4";
 const LP_CONTRACT_ADDRESS = "0x0D658ca6BCb02E455355a908E7F6D432b0359950";
 const UNIVERSE_CONTRACT_ADDRESS = "0xd2998765f004a3B40C65aF2f8FA90dBC81BF66c7";
 
@@ -51,8 +51,11 @@ export const Web3Provider = (props) => {
   const [tokensStaked, setTokensStaked] = useState("0.0");
   const [reward, setReward] = useState("0.0");
   const [apr, setApr] = useState("~");
+  const [update,setUpdate] = useState(0);
 
   const functionsToExport = {};
+ 
+   
 
   functionsToExport.fetchStuff = async () => {
     const [_balance, _tokensStaked, _reward, _totalSupply, _rewardRate] =
@@ -76,6 +79,17 @@ export const Web3Provider = (props) => {
       functionsToExport.fetchStuff();
     }
   }, [account]);
+  useEffect(()=>{
+    functionsToExport.connectWallet()
+  },[])
+ 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      functionsToExport.fetchStuff()
+    }, 10000);
+  
+    return () => clearInterval(interval);
+  }, [])
 
   const onAccountsChanged = async (accounts) => {
     setAccount(accounts[0]);
@@ -305,7 +319,6 @@ export const Web3Provider = (props) => {
   functionsToExport.getRewardRate = async () => {
     try {
       const result = await contractObjects?.stakingContract?.rewardRate();
-      console.log(result);
       return utils?.formatEther(result?.toString());
     } catch (error) {
       console.log(error);

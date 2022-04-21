@@ -18,14 +18,53 @@ const StakingCard = () => {
     approveStaking,
     getTotalSupply,
     getRewardRate,
-    fetchStuff,
-    balance,
-    tokensStaked,
-    apr,
-    reward,
   } = useContext(Web3Context);
+  
+  const [balance, setBalance] = useState("0.0");
+  const [tokensStaked, setTokensStaked] = useState("0.0");
+  const [reward, setReward] = useState("0.0");
+  const [apr, setApr] = useState("~");
+  const [blockNumber, setBlockNumber] = useState(0)
+  useEffect(() => {
+      const interval = setInterval(() => {    
+                  setBlockNumber(o=>{
+                    console.log(o)
+                    return(o+1)});
+      }, 10000);
+
+      return () => clearInterval(interval); 
+  }, [])
+  useEffect(() => {
+    if (account) {
+      fetchStuff();
+    }
+  }, [account,blockNumber]);
+  const fetchStuff = async () => {
+    const [_balance, _tokensStaked, _reward, _totalSupply, _rewardRate] =
+      await Promise.all([
+        getBalance(),
+        getTokensStaked(),
+        getEarned(),
+        getTotalSupply(),
+        getRewardRate(),
+      ]);
+    setBalance(parseFloat(_balance).toFixed(2));
+    setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
+    setReward(parseFloat(_reward).toFixed(2));
+    console.log(_totalSupply);
+    console.log(_rewardRate);
+    const _apr = (_rewardRate * 365) / _totalSupply;
+    setApr(parseFloat(_apr).toFixed(2));
+  };
 
   const [loadingState, setLoadingState] = useState(false);
+
+  const [toStake, setToStake] = useState();
+    const [toUnstake, setToUnstake] = useState();
+    const [approved, setApproved] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [spinState, setSpinState] = useState(loadingState);
+
 
   function handleClaim() {
     setLoadingState(true);
@@ -34,13 +73,9 @@ const StakingCard = () => {
     });
   }
 
-  const Tabs = ({ color }) => {
+  const Tabs = ({ color, toStake, setToStake, toUnstake,setToUnstake,approved, setApproved, loading, setLoading, spinState,setSpinState }) => {
     const [openTab, setOpenTab] = React.useState(2);
-    const [toStake, setToStake] = useState();
-    const [toUnstake, setToUnstake] = useState();
-    const [approved, setApproved] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [spinState, setSpinState] = useState(loadingState);
+    
 
     const handleMaxStake = () => {
       setToStake(balance);
@@ -85,6 +120,7 @@ const StakingCard = () => {
       const value = e.target.value.replace(/\+|-/gi, "");
       setToStake(value);
     };
+   
 
     return (
       <>
@@ -166,7 +202,7 @@ const StakingCard = () => {
                           class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                           onClick={handleMaxStake}
                         >
-                          <img src="./wallet.png" className="w-4 mr-1" />
+                          <img src="/staking/wallet.png" className="w-4 mr-1" />
                           Max
                         </button>
                       </div>
@@ -224,7 +260,7 @@ const StakingCard = () => {
                           </svg>
                         ) : (
                           <>
-                            <img src="./wallet.png" className="w-5 mr-3" />
+                            <img src="/staking/wallet.png" className="w-5 mr-3" />
                             Stake
                           </>
                         )}
@@ -256,7 +292,7 @@ const StakingCard = () => {
                           class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                           onClick={handleMaxUnstake}
                         >
-                          <img src="./wallet.png" className="w-4 mr-1" />
+                          <img src="/staking/wallet.png" className="w-4 mr-1" />
                           Max
                         </button>
                       </div>
@@ -287,7 +323,7 @@ const StakingCard = () => {
                           </svg>
                         ) : (
                           <>
-                            <img src="./wallet.png" className="w-5 mr-3" />
+                            <img src="/staking/wallet.png" className="w-5 mr-3" />
                             Unstake
                           </>
                         )}
@@ -308,7 +344,7 @@ const StakingCard = () => {
       <div className="flex flex-col">
         <div className="flex justify-between">
           <div className="flex">
-            <img src="./aqua.png" className="w-7 h-7 mr-1" />
+            <img src="/staking/aqua.png" className="w-7 h-7 mr-1" />
             <div className="text-left text-xl font-bold">AQUA/ONE</div>
             <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
               APR {apr}%
@@ -387,7 +423,8 @@ const StakingCard = () => {
             </div>
           </div>
         </div>
-        <Tabs />
+        {Tabs({toStake,toUnstake,approveStaking,approved,loading,setApproved, setLoading,setSpinState,spinState,setToStake,setToUnstake})}
+        
       </div>
     </div>
   );
@@ -398,8 +435,7 @@ export default function Staking() {
     <div>
       <Info />
       <div className=" mt-24 gap-5 mb-40">
-        <StakingCard />
-        {/* <StakingCard /> */}
+{StakingCard()}        {/* <StakingCard /> */}
       </div>
     </div>
   );
