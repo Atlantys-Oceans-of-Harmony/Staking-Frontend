@@ -372,7 +372,7 @@ const StakingCard = () => {
               <div className="text-white font-bold text-left">{reward}</div>
               {/* <div className="text-white font-bold text-left">$ 300,000</div> */}
               <div className="text-white font-bold text-left">
-                {tokensStaked}
+                {tokensStaked} Aqua/ONE LP
               </div>
             </div>
           </div>
@@ -387,7 +387,7 @@ const StakingCard = () => {
                 </div>
 
                 <div className="text-white text-center text-left mt-2 font-bold text-2xl">
-                  {reward}
+                  {reward} AQUA
                 </div>
 
                 <div className="mt-4">
