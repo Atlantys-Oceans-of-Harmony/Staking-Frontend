@@ -19,26 +19,27 @@ const StakingCard = () => {
     getTotalSupply,
     getRewardRate,
   } = useContext(Web3Context);
-  
+
   const [balance, setBalance] = useState("0.0");
   const [tokensStaked, setTokensStaked] = useState("0.0");
   const [reward, setReward] = useState("0.0");
   const [apr, setApr] = useState("~");
-  const [blockNumber, setBlockNumber] = useState(0)
+  const [blockNumber, setBlockNumber] = useState(0);
   useEffect(() => {
-      const interval = setInterval(() => {    
-                  setBlockNumber(o=>{
-                    console.log(o)
-                    return(o+1)});
-      }, 10000);
+    const interval = setInterval(() => {
+      setBlockNumber((o) => {
+        console.log(o);
+        return o + 1;
+      });
+    }, 10000);
 
-      return () => clearInterval(interval); 
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
   useEffect(() => {
     if (account) {
       fetchStuff();
     }
-  }, [account,blockNumber]);
+  }, [account, blockNumber]);
   const fetchStuff = async () => {
     const [_balance, _tokensStaked, _reward, _totalSupply, _rewardRate] =
       await Promise.all([
@@ -48,9 +49,9 @@ const StakingCard = () => {
         getTotalSupply(),
         getRewardRate(),
       ]);
-    setBalance(parseFloat(_balance).toFixed(2));
-    setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
-    setReward(parseFloat(_reward).toFixed(2));
+    setBalance(_balance);
+    setTokensStaked(_tokensStaked);
+    setReward(_reward);
     console.log(_totalSupply);
     console.log(_rewardRate);
     const _apr = (_rewardRate * 365) / _totalSupply;
@@ -60,11 +61,10 @@ const StakingCard = () => {
   const [loadingState, setLoadingState] = useState(false);
 
   const [toStake, setToStake] = useState();
-    const [toUnstake, setToUnstake] = useState();
-    const [approved, setApproved] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [spinState, setSpinState] = useState(loadingState);
-
+  const [toUnstake, setToUnstake] = useState();
+  const [approved, setApproved] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [spinState, setSpinState] = useState(loadingState);
 
   function handleClaim() {
     setLoadingState(true);
@@ -73,9 +73,20 @@ const StakingCard = () => {
     });
   }
 
-  const Tabs = ({ color, toStake, setToStake, toUnstake,setToUnstake,approved, setApproved, loading, setLoading, spinState,setSpinState }) => {
+  const Tabs = ({
+    color,
+    toStake,
+    setToStake,
+    toUnstake,
+    setToUnstake,
+    approved,
+    setApproved,
+    loading,
+    setLoading,
+    spinState,
+    setSpinState,
+  }) => {
     const [openTab, setOpenTab] = React.useState(2);
-    
 
     const handleMaxStake = () => {
       setToStake(balance);
@@ -120,7 +131,6 @@ const StakingCard = () => {
       const value = e.target.value.replace(/\+|-/gi, "");
       setToStake(value);
     };
-   
 
     return (
       <>
@@ -260,7 +270,10 @@ const StakingCard = () => {
                           </svg>
                         ) : (
                           <>
-                            <img src="/staking/wallet.png" className="w-5 mr-3" />
+                            <img
+                              src="/staking/wallet.png"
+                              className="w-5 mr-3"
+                            />
                             Stake
                           </>
                         )}
@@ -323,7 +336,10 @@ const StakingCard = () => {
                           </svg>
                         ) : (
                           <>
-                            <img src="/staking/wallet.png" className="w-5 mr-3" />
+                            <img
+                              src="/staking/wallet.png"
+                              className="w-5 mr-3"
+                            />
                             Unstake
                           </>
                         )}
@@ -369,7 +385,9 @@ const StakingCard = () => {
               </div>
             </div>
             <div className="flex-1 pt-5 flex flex-col gap-4">
-              <div className="text-white font-bold text-left">{reward}</div>
+              <div className="text-white font-bold text-left">
+                {parseFloat(reward).toFixed(2)}
+              </div>
               {/* <div className="text-white font-bold text-left">$ 300,000</div> */}
               <div className="text-white font-bold text-left">
                 {tokensStaked}
@@ -387,7 +405,7 @@ const StakingCard = () => {
                 </div>
 
                 <div className="text-white text-center text-left mt-2 font-bold text-2xl">
-                  {reward}
+                  {parseFloat(reward).toFixed(2)}
                 </div>
 
                 <div className="mt-4">
@@ -423,8 +441,19 @@ const StakingCard = () => {
             </div>
           </div>
         </div>
-        {Tabs({toStake,toUnstake,approveStaking,approved,loading,setApproved, setLoading,setSpinState,spinState,setToStake,setToUnstake})}
-        
+        {Tabs({
+          toStake,
+          toUnstake,
+          approveStaking,
+          approved,
+          loading,
+          setApproved,
+          setLoading,
+          setSpinState,
+          spinState,
+          setToStake,
+          setToUnstake,
+        })}
       </div>
     </div>
   );
@@ -435,7 +464,7 @@ export default function Staking() {
     <div>
       <Info />
       <div className=" mt-24 gap-5 mb-40">
-{StakingCard()}        {/* <StakingCard /> */}
+        {StakingCard()} {/* <StakingCard /> */}
       </div>
     </div>
   );

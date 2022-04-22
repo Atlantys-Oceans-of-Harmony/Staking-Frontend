@@ -51,11 +51,9 @@ export const Web3Provider = (props) => {
   const [tokensStaked, setTokensStaked] = useState("0.0");
   const [reward, setReward] = useState("0.0");
   const [apr, setApr] = useState("~");
-  const [update,setUpdate] = useState(0);
+  const [update, setUpdate] = useState(0);
 
   const functionsToExport = {};
- 
-   
 
   functionsToExport.fetchStuff = async () => {
     const [_balance, _tokensStaked, _reward, _totalSupply, _rewardRate] =
@@ -79,17 +77,17 @@ export const Web3Provider = (props) => {
       functionsToExport.fetchStuff();
     }
   }, [account]);
-  useEffect(()=>{
-    functionsToExport.connectWallet()
-  },[])
- 
+  useEffect(() => {
+    functionsToExport.connectWallet();
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      functionsToExport.fetchStuff()
+      functionsToExport.fetchStuff();
     }, 10000);
-  
+
     return () => clearInterval(interval);
-  }, [])
+  }, []);
 
   const onAccountsChanged = async (accounts) => {
     setAccount(accounts[0]);
