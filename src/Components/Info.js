@@ -54,7 +54,7 @@ export default function Info() {
             </div>
 
             <div className="text-white text-center text-left mt-2 font-bold text-4xl">
-              {reward}
+              {reward} AQUA
             </div>
 
             <div className="mt-8">
