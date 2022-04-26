@@ -22,6 +22,7 @@ export default function Info() {
     getBalance,
     approveStaking,
     reward,
+    rewardsRarity,
   } = useContext(Web3Context);
 
   const [loading, setLoading] = useState(false);
@@ -54,10 +55,12 @@ export default function Info() {
             </div>
 
             <div className="text-white text-center text-left mt-2 font-bold text-4xl">
-              {reward} AQUA
+              {(!isNaN(reward) ? reward : 0) +
+                (!isNaN(rewardsRarity) ? rewardsRarity : 0)}{" "}
+              AQUA
             </div>
 
-            <div className="mt-8">
+            {/* <div className="mt-8">
               <button
                 class="font-bold text-white inline-flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 border-0 py-3 px-10 focus:outline-none hover:bg-gray-700 rounded text-base my-2"
                 onClick={handleClaim}
@@ -85,7 +88,7 @@ export default function Info() {
                   "Claim All"
                 )}
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
