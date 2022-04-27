@@ -218,10 +218,7 @@ const StakingCard = () => {
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxStake}
                           >
-                            <img
-                              src="/staking/wallet.png"
-                              className="w-4 mr-1"
-                            />
+                            <img src="./wallet.png" className="w-4 mr-1" />
                             Max
                           </button>
                         </div>
@@ -279,10 +276,7 @@ const StakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img
-                                src="/staking/wallet.png"
-                                className="w-5 mr-3"
-                              />
+                              <img src="./wallet.png" className="w-5 mr-3" />
                               Stake
                             </>
                           )}
@@ -314,10 +308,7 @@ const StakingCard = () => {
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxUnstake}
                           >
-                            <img
-                              src="/staking/wallet.png"
-                              className="w-4 mr-1"
-                            />
+                            <img src="./wallet.png" className="w-4 mr-1" />
                             Max
                           </button>
                         </div>
@@ -348,10 +339,7 @@ const StakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img
-                                src="/staking/wallet.png"
-                                className="w-5 mr-3"
-                              />
+                              <img src="./wallet.png" className="w-5 mr-3" />
                               Unstake
                             </>
                           )}
@@ -373,8 +361,8 @@ const StakingCard = () => {
       <div className="flex flex-col">
         <div className="flex justify-between">
           <div className="flex">
-            <img src="/staking/harmony.png" className="w-5 h-5 mr-1 mt-1" />
-            <img src="/staking/aqua.png" className="w-7 h-7 mr-1 z-10 -ml-2" />
+            <img src="./harmony.png" className="w-5 h-5 mr-1 mt-1" />
+            <img src="./aqua.png" className="w-7 h-7 mr-1 z-10 -ml-2" />
 
             <div className="text-left text-xl font-bold">AQUA/ONE</div>
             <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
@@ -383,7 +371,7 @@ const StakingCard = () => {
           </div>
 
           <div onClick={handleToggleOpenState}>
-            <img src="./staking/down.png" className="w-8 p-2  cursor-pointer" />
+            <img src="./down.png" className="w-8 p-2  cursor-pointer" />
           </div>
         </div>
         {openState ? (
@@ -404,7 +392,7 @@ const StakingCard = () => {
                 </div>
                 <div className="flex-1 pt-5 flex flex-col gap-4">
                   <div className="text-white font-bold text-left">
-                    {parseFloat(reward).toFixed(2)}
+                    {parseFloat(reward).toFixed(4)}
                   </div>
                   {/* <div className="text-white font-bold text-left">$ 300,000</div> */}
                   <div className="text-white font-bold text-left">
@@ -423,7 +411,7 @@ const StakingCard = () => {
                     </div>
 
                     <div className="text-white text-center text-left mt-2 font-bold text-2xl">
-                      {parseFloat(reward).toFixed(2)} AQUA
+                      {parseFloat(reward).toFixed(4)} AQUA
                     </div>
 
                     <div className="mt-4">
@@ -689,10 +677,7 @@ const SingleStakingCard = () => {
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxStake}
                           >
-                            <img
-                              src="/staking/wallet.png"
-                              className="w-4 mr-1"
-                            />
+                            <img src="/wallet.png" className="w-4 mr-1" />
                             Max
                           </button>
                         </div>
@@ -750,10 +735,7 @@ const SingleStakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img
-                                src="/staking/wallet.png"
-                                className="w-5 mr-3"
-                              />
+                              <img src="/wallet.png" className="w-5 mr-3" />
                               Stake
                             </>
                           )}
@@ -785,10 +767,7 @@ const SingleStakingCard = () => {
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxUnstake}
                           >
-                            <img
-                              src="/staking/wallet.png"
-                              className="w-4 mr-1"
-                            />
+                            <img src="/wallet.png" className="w-4 mr-1" />
                             Max
                           </button>
                         </div>
@@ -819,10 +798,7 @@ const SingleStakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img
-                                src="/staking/wallet.png"
-                                className="w-5 mr-3"
-                              />
+                              <img src="./wallet.png" className="w-5 mr-3" />
                               Unstake
                             </>
                           )}
@@ -844,7 +820,7 @@ const SingleStakingCard = () => {
       <div className="flex flex-col">
         <div className="flex justify-between">
           <div className="flex">
-            <img src="/staking/aqua.png" className="w-7 h-7 mr-1" />
+            <img src="./aqua.png" className="w-7 h-7 mr-1" />
             <div className="text-left text-xl font-bold">AQUA</div>
             <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
               APR {aprSingle}%
@@ -852,7 +828,7 @@ const SingleStakingCard = () => {
           </div>
 
           <div onClick={handleToggleOpenState}>
-            <img src="./staking/down.png" className="w-8 p-2  cursor-pointer" />
+            <img src="./down.png" className="w-8 p-2  cursor-pointer" />
           </div>
         </div>
         {openState && (
@@ -871,7 +847,7 @@ const SingleStakingCard = () => {
               </div>
               <div className="flex-1 pt-5 flex flex-col gap-4">
                 <div className="text-white font-bold text-left">
-                  {parseFloat(rewardsSingle).toFixed(2)}
+                  {parseFloat(rewardsSingle).toFixed(4)}
                 </div>
                 {/* <div className="text-white font-bold text-left">$ 300,000</div> */}
                 <div className="text-white font-bold text-left">
@@ -890,7 +866,7 @@ const SingleStakingCard = () => {
                   </div>
 
                   <div className="text-white text-center text-left mt-2 font-bold text-2xl">
-                    {parseFloat(rewardsSingle).toFixed(2)} AQUA
+                    {parseFloat(rewardsSingle).toFixed(4)} AQUA
                   </div>
 
                   <div className="mt-4">
@@ -945,6 +921,90 @@ const SingleStakingCard = () => {
     </div>
   );
 };
+// const LockedStakingCard = () => {
+//   const {
+//     account,
+//     rewardsSingle,
+//     balanceSingle,
+//     tokensStakedSingle,
+//     aprSingle,
+//     getRewardsSingle,
+//     getTokensStakedSingle,
+//     getBalanceSingle,
+//     getAprSingle,
+//     claimRewardsSingle,
+//     stakeSingle,
+//     withdrawSingle,
+//     approveStakingSingle,
+//   } = useContext(Web3Context);
+
+//   const [blockNumber, setBlockNumber] = useState(0);
+
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       setBlockNumber((o) => {
+//         console.log(o);
+//         return o + 1;
+//       });
+//     }, 10000);
+
+//     return () => clearInterval(interval);
+//   }, []);
+//   useEffect(() => {
+//     if (account) {
+//       fetchStuff();
+//     }
+//   }, [account, blockNumber]);
+//   const fetchStuff = async () => {
+//     // const [_balance, _tokensStaked, _reward, _apr] =
+//     await Promise.all([
+//       getBalanceSingle(),
+//       getTokensStakedSingle(),
+//       getRewardsSingle(),
+//       getAprSingle(),
+//     ]);
+//     // setBalance(_balance);
+//     // setTokensStaked(_tokensStaked);
+//     // setReward(_reward);
+//     // setApr(_apr);
+//   };
+
+//   const [loadingState, setLoadingState] = useState(false);
+//   const [toStake, setToStake] = useState();
+//   const [toUnstake, setToUnstake] = useState();
+//   const [approved, setApproved] = useState(false);
+//   const [loading, setLoading] = useState(false);
+//   const [spinState, setSpinState] = useState(loadingState);
+//   const [openState, setOpenState] = useState(false);
+
+//   function handleClaim() {
+//     setLoadingState(true);
+//     claimRewardsSingle().then(() => {
+//       fetchStuff().then(setLoadingState(false));
+//     });
+//   }
+//   const handleToggleOpenState = () => {
+//     setOpenState(!openState);
+//   };
+
+//   return (
+//     <div className="staking-card rounded-lg border border-blue-600 bg-black/25 text-white p-5 flex flex-col mx-6 sm:mx-auto mt-10 shadow-lg shadow-cyan-500/50">
+//       <div className="flex flex-col">
+//         <div className="flex justify-between">
+//           <div className="flex">
+//             <img src="./aqua.png" className="w-7 h-7 mr-1" />
+//             <div className="text-left text-xl font-bold">AQUA LOCKED</div>
+//           </div>
+
+//           <div onClick={handleToggleOpenState}>
+//             <img src="./down.png" className="w-8 p-2  cursor-pointer" />
+//           </div>
+//         </div>
+//         {openState && <div className="flex flex-col md:flex-row mt-6"></div>}
+//       </div>
+//     </div>
+//   );
+// };
 
 export default function Staking() {
   return (
@@ -953,6 +1013,7 @@ export default function Staking() {
       <div className=" mt-24 gap-5 mb-40">
         {StakingCard()} {/* <StakingCard /> */}
         {SingleStakingCard()}
+        {/* {LockedStakingCard()} */}
       </div>
     </div>
   );

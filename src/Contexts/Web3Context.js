@@ -16,24 +16,24 @@ import singleStakingAbi from "../Abi/stakingSingle.json";
 
 const Web3Context = createContext();
 
-// const RPC_URL = "https://rpc.hermesdefi.io/";
-const RPC_URL = "https://api.s0.b.hmny.io";
+const RPC_URL = "https://rpc.hermesdefi.io/";
+// const RPC_URL = "https://api.s0.b.hmny.io";
 
-// const CHAIN_ID = 1666600000;
-const CHAIN_ID = 1666700000;
+const CHAIN_ID = 1666600000;
+// const CHAIN_ID = 1666700000;
 
 const NATIVE_CURRENCY = {
   name: "one",
   symbol: "ONE", // 2-6 characters long
   decimals: 18,
 };
-const CHAIN_NAME = "Harmony Testnet";
+const CHAIN_NAME = "Harmony Mainnet";
 const STAKING_CONTRACT_ADDRESS = "0xcc0E08340359a15822020E9F6E47FDF5B76FCb30";
 const LP_CONTRACT_ADDRESS = "0xc4320103757aDA1A8cC43273ac35bdc4E0da6093";
-// const UNIVERSE_CONTRACT_ADDRESS = "0x1a5b1109f04cc3f45d4c533685a347656d0983e4";
-const UNIVERSE_CONTRACT_ADDRESS = "0xd2998765f004a3B40C65aF2f8FA90dBC81BF66c7";
+const UNIVERSE_CONTRACT_ADDRESS = "0x1a5b1109f04cc3f45d4c533685a347656d0983e4";
+// const UNIVERSE_CONTRACT_ADDRESS = "0xd2998765f004a3B40C65aF2f8FA90dBC81BF66c7";
 const SINGLE_STAKING_CONTRACT_ADDRESS =
-  "0xEF5c6ca1E1cfc20B7aD68d64caE82f1c04536846";
+  "0x5dfafE6a26985b636300327Fc366433822ab0DAa";
 
 export const Web3Provider = (props) => {
   const [account, setAccount] = useState();
@@ -109,8 +109,7 @@ export const Web3Provider = (props) => {
     setSigner(_signer);
   };
   useEffect(() => {
-    const _signer =
-      signer || new ethers.providers.Web3Provider(window.ethereum, "any");
+    const _signer = signer;
     try {
       _signer?.getChainId().then((val) => setCorrectChain(val === CHAIN_ID));
     } catch (e) {

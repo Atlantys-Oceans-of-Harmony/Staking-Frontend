@@ -19,7 +19,7 @@ export default function Header() {
           class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-3 px-10 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
           onClick={account ? () => {} : connectWallet}
         >
-          <img src={"/staking/wallet.png"} className="w-5 mr-3" />
+          <img src={"./wallet.png"} className="w-5 mr-3" />
           {account ? formatAddress(account) : "Connect"}
         </button>
       </div>
