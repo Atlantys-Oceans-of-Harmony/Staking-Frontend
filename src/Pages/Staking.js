@@ -12,7 +12,7 @@ export default function Staking() {
     <div>
       <Info />
       <div className=" mt-24 gap-5 mb-40">
-        {/* {LPStakingCard()} <StakingCard /> */}
+        {LPStakingCard()}
         {SingleStakingCard()}
         {LockedStakingCard()}
       </div>

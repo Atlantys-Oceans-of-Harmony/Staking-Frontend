@@ -17,11 +17,11 @@ import lockedStakingAbi from "../Abi/stakingLocked.json";
 
 const Web3Context = createContext();
 
-// const RPC_URL = "https://rpc.hermesdefi.io/";
-const RPC_URL = "https://api.s0.b.hmny.io";
+const RPC_URL = "https://rpc.hermesdefi.io/";
+// const RPC_URL = "https://api.s0.b.hmny.io";
 
-// const CHAIN_ID = 1666600000;
-const CHAIN_ID = 1666700000;
+const CHAIN_ID = 1666600000;
+// const CHAIN_ID = 1666700000;
 
 const NATIVE_CURRENCY = {
   name: "one",
@@ -36,7 +36,7 @@ const UNIVERSE_CONTRACT_ADDRESS = "0xd2998765f004a3B40C65aF2f8FA90dBC81BF66c7";
 const SINGLE_STAKING_CONTRACT_ADDRESS =
   "0x75967C6dAc6e4Db313F1a17b28f4a14866CA9541";
 const LOCKED_STAKING_CONTRACT_ADDRESS =
-  "0x1632268F67e19fA6771d73cb73A14fbCFf1f1545";
+  "0x2E2E703428cD3907a48c31ea3aD7D783e1EB91B3";
 
 const setupMultiCallContract = async (nftAddress, nftABI) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -185,35 +185,33 @@ export const Web3Provider = (props) => {
 
   functionsToExport.fetchStuff = async () => {
     const [
-      // _balance,
-      // _tokensStaked,
-      // _reward,
-      // _totalSupply,
-      // _rewardRate,
-      // _rewardsSingle,
-      // _tokensStakedSingle,
-      // _balanceSingle,
-      // _aprSingle,
+      _balance,
+      _tokensStaked,
+      _reward,
+      _totalSupply,
+      _rewardRate,
+      _rewardsSingle,
+      _tokensStakedSingle,
+      _balanceSingle,
+      _aprSingle,
       _tokensStakedLocked,
     ] = await Promise.all([
-      // functionsToExport.getBalance(),
-      // functionsToExport.getTokensStaked(),
-      // functionsToExport.getEarned(),
-      // functionsToExport.getTotalSupply(),
-      // functionsToExport.getRewardRate(),
-      // functionsToExport.getRewardsSingle(),
-      // functionsToExport.getTokensStakedSingle(),
-      // functionsToExport.getBalanceSingle(),
-      // functionsToExport.getAprSingle(),
-      // functionsToExport.getTokensStakedLocked(),
+      functionsToExport.getBalance(),
+      functionsToExport.getTokensStaked(),
+      functionsToExport.getEarned(),
+      functionsToExport.getTotalSupply(),
+      functionsToExport.getRewardRate(),
+      functionsToExport.getRewardsSingle(),
+      functionsToExport.getTokensStakedSingle(),
+      functionsToExport.getBalanceSingle(),
+      functionsToExport.getAprSingle(),
+      functionsToExport.getTokensStakedLocked(),
     ]);
-    // setBalance(parseFloat(_balance).toFixed(2));
-    // setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
-    // setReward(parseFloat(_reward).toFixed(2));
-    // console.log(_totalSupply);
-    // console.log(_rewardRate);
-    // const _apr = (_rewardRate * 365) / _totalSupply;
-    // setApr(parseFloat(_apr).toFixed(2));
+    setBalance(parseFloat(_balance).toFixed(2));
+    setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
+    setReward(parseFloat(_reward).toFixed(2));
+    const _apr = (_rewardRate * 365) / _totalSupply;
+    setApr(parseFloat(_apr).toFixed(2));
   };
 
   functionsToExport.connectWallet = async (defaultAccount = -1) => {
