@@ -214,6 +214,7 @@ const StakingCard = () => {
                           </span>
                         </div>
                         <div>
+                        
                           <button
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxStake}
@@ -672,17 +673,20 @@ const SingleStakingCard = () => {
                             {parseFloat(balanceSingle).toFixed(4)} AQUA
                           </span>
                         </div>
-                        <div>
+                        <div className="flex items-center">
+                      
                           <button
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxStake}
                           >
-                            <img src="/wallet.png" className="w-4 mr-1" />
+                            <img src="./wallet.png" className="w-4 mr-1" />
                             Max
                           </button>
                         </div>
                       </div>
-                      <div className="flex gap-5 mt-10 justify-center">
+                      <div className="mt-10 text-sm">Deposit Fee: 2% sent to burn wallet</div>
+
+                      <div className="flex gap-5 mt-2 justify-center">
                         <button
                           class="font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
                           onClick={handleApprove}
@@ -735,7 +739,7 @@ const SingleStakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img src="/wallet.png" className="w-5 mr-3" />
+                              <img src="./wallet.png" className="w-5 mr-3" />
                               Stake
                             </>
                           )}
@@ -762,12 +766,13 @@ const SingleStakingCard = () => {
                             {parseFloat(tokensStakedSingle).toFixed(4)} AQUA
                           </span>
                         </div>
-                        <div>
+                        <div className="flex items-center">
+                         
                           <button
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxUnstake}
                           >
-                            <img src="/wallet.png" className="w-4 mr-1" />
+                            <img src="./wallet.png" className="w-4 mr-1" />
                             Max
                           </button>
                         </div>

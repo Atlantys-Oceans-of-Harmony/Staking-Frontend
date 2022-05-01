@@ -15,13 +15,22 @@ export default function Header() {
           {/* <img src="./logo.png" className="w-60" /> */}
           Atlantys <span className="text-blue-400 ml-1"> Staking</span>
         </a>
-        <button
-          class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-3 px-10 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
-          onClick={account ? () => {} : connectWallet}
-        >
-          <img src={"./wallet.png"} className="w-5 mr-3" />
-          {account ? formatAddress(account) : "Connect"}
-        </button>
+        <div className="md:flex items-center">
+          <a
+            class="font-bold mr-2 text-blue-500 inline-flex items-center bg-gray-800 border-0 py-3 px-10 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
+            href="https://atlantys.one/map"
+            target={"_blank"}
+          >
+            Launch Game
+          </a>
+          <button
+            class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-3 px-10 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
+            onClick={account ? () => {} : connectWallet}
+          >
+            <img src={"./wallet.png"} className="w-5 mr-3" />
+            {account ? formatAddress(account) : "Connect"}
+          </button>
+        </div>
       </div>
     </header>
   );
