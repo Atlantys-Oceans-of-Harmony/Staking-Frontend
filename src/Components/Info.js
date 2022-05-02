@@ -19,17 +19,26 @@ export default function Info() {
     withdraw,
     rewardPerToken,
     getTokensStaked,
+
     getBalance,
     approveStaking,
+    getRewardsLocked,
     reward,
+    rewardsLocked,
     rewardsRarity,
+    getTokensStakedLocked,
   } = useContext(Web3Context);
-
+  let _sum = 0;
+  rewardsLocked?.map((e) => (_sum += parseFloat(e.toString())));
   const [loading, setLoading] = useState(false);
 
   function handleClaim() {
     setLoading(true);
-    getReward().then(() => {
+    Promise.all([
+      getReward(),
+      getTokensStakedLocked(),
+      getRewardsLocked(),
+    ]).then(() => {
       getEarned().then((_reward) => {
         setLoading(false);
       });
@@ -56,7 +65,8 @@ export default function Info() {
 
             <div className="text-white text-center text-left mt-2 font-bold text-4xl">
               {(!isNaN(reward) ? reward : 0) +
-                (!isNaN(rewardsRarity) ? rewardsRarity : 0)}{" "}
+                (!isNaN(rewardsRarity) ? rewardsRarity : 0) +
+                _sum}{" "}
               AQUA
             </div>
 
