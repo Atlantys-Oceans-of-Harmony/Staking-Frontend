@@ -305,12 +305,11 @@ const LockedStakingCard = () => {
 
   const handleForcedWithdraw = async () => {
     await withdrawLockedForced(forcedUnstake);
-    fetchStuff().then(() => {
-      setStakedItems(tokensStakedLocked);
-      setRewardItems(rewardsLocked);
-      setForcedUnstakeModalOpen(false);
-      intialiseSelectedStakes(tokensStakedLocked.length);
-    });
+    await fetchStuff();
+    setStakedItems(tokensStakedLocked);
+    setRewardItems(rewardsLocked);
+    setForcedUnstakeModalOpen(false);
+    intialiseSelectedStakes(tokensStakedLocked.length);
   };
 
   return (

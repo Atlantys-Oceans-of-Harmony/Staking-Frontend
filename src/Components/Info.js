@@ -66,7 +66,7 @@ export default function Info() {
             <div className="text-white text-center text-left mt-2 font-bold text-4xl">
               {(!isNaN(reward) ? reward : 0) +
                 (!isNaN(rewardsRarity) ? rewardsRarity : 0) +
-                _sum}{" "}
+                _sum.toFixed(4)}{" "}
               AQUA
             </div>
 
