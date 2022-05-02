@@ -18,10 +18,10 @@ import lockedStakingAbi from "../Abi/stakingLocked.json";
 const Web3Context = createContext();
 
 const RPC_URL = "https://rpc.hermesdefi.io/";
-// const RPC_URL = "https://api.s0.b.hmny.io";
+// const RPC_URL = "https://api.s0.b.hmny.io"; //testnet
 
 const CHAIN_ID = 1666600000;
-// const CHAIN_ID = 1666700000;
+// const CHAIN_ID = 1666700000; //testnet
 
 const NATIVE_CURRENCY = {
   name: "one",
@@ -31,12 +31,14 @@ const NATIVE_CURRENCY = {
 const CHAIN_NAME = "Harmony Mainnet";
 const STAKING_CONTRACT_ADDRESS = "0xcc0E08340359a15822020E9F6E47FDF5B76FCb30";
 const LP_CONTRACT_ADDRESS = "0xc4320103757aDA1A8cC43273ac35bdc4E0da6093";
-// const UNIVERSE_CONTRACT_ADDRESS = "0x1a5b1109f04cc3f45d4c533685a347656d0983e4";
-const UNIVERSE_CONTRACT_ADDRESS = "0xd2998765f004a3B40C65aF2f8FA90dBC81BF66c7";
+const UNIVERSE_CONTRACT_ADDRESS = "0x1a5b1109f04cc3f45d4c533685a347656d0983e4";
+// const UNIVERSE_CONTRACT_ADDRESS = "0xd2998765f004a3B40C65aF2f8FA90dBC81BF66c7"; //testnet
 const SINGLE_STAKING_CONTRACT_ADDRESS =
   "0x75967C6dAc6e4Db313F1a17b28f4a14866CA9541";
 const LOCKED_STAKING_CONTRACT_ADDRESS =
   "0x2E2E703428cD3907a48c31ea3aD7D783e1EB91B3";
+// const LOCKED_STAKING_CONTRACT_ADDRESS =
+//   "0x2bAd82b85d68594b042F7507362b313B075B81a2"; //testnet
 
 const setupMultiCallContract = async (nftAddress, nftABI) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -372,7 +374,6 @@ export const Web3Provider = (props) => {
       result.push(rate);
     }
     const _rateLocked = result.map((el) => ethers.utils.formatUnits(el, 0));
-    console.log(_rateLocked);
     setRateLocked(_rateLocked);
   };
 
@@ -413,7 +414,8 @@ export const Web3Provider = (props) => {
       const result = await contractObjects?.lockedStakingContract?.claimReward(
         toClaim
       );
-      await result.wait();
+      const claimedRewards = await result.wait();
+      console.log(claimedRewards);
       console.log("Claimed rewards");
     } catch (error) {
       console.log(error);
