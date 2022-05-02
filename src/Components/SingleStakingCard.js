@@ -186,7 +186,11 @@ const SingleStakingCard = () => {
                 <div className=" py-5 flex-auto">
                   <div className="tab-content tab-space">
                     <div
-                      className={openTab === 2 ? "block" : "hidden"}
+                      className={
+                        openTab === 2
+                          ? "block flex flex-col"
+                          : "hidden flex flex-col"
+                      }
                       id="link2"
                     >
                       <div className="text-blue-500 text-left">
@@ -215,7 +219,12 @@ const SingleStakingCard = () => {
                           </button>
                         </div>
                       </div>
-                      <div className="flex gap-5 mt-10 justify-center">
+                      <div className="text-white flex text-center text-sm mt-10 w-full">
+                        <div className="mx-auto">
+                          Deposit Fee: 2% sent to burn wallet
+                        </div>
+                      </div>
+                      <div className="flex gap-5 mt-2 justify-center">
                         <button
                           class="font-medium text-blue-500 inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
                           onClick={handleApprove}

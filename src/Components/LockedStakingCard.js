@@ -6,7 +6,7 @@ import "./style.css";
 import { ethers } from "ethers";
 import Countdown from "react-countdown";
 
-const calculateDurationCode = (durationCode) => {
+const calculateDurationCode = (durationCode = 0) => {
   const _durationCode = ethers.utils.formatUnits(durationCode, 0);
   switch (_durationCode) {
     case "0":
@@ -20,154 +20,117 @@ const calculateDurationCode = (durationCode) => {
   }
 };
 
-const StakedCard = ({ index, selected, select, data, rewards, rate }) => {
-  const [isSelected, setisSelected] = useState(selected[index]);
-  const [rewardsLocal, setRewardsLocal] = useState();
-  const [duration, setDuration] = useState(0);
-  const [apr, setApr] = useState(0);
-
-  useEffect(() => {
-    setisSelected(selected[index]);
-  }, [selected]);
-
-  useEffect(() => {
-    rewards && setRewardsLocal(rewards[index]);
-  }, [rewards]);
-
-  useEffect(() => {
-    console.log(rate);
-    rate && setApr(rate[data?.durationCode]);
-  }, [rate]);
-
-  const handleSelect = () => {
-    select();
-    setisSelected(!isSelected);
-  };
-
-  useEffect(() => {
-    const calculateDurationCode = () => {
-      const durationCode = ethers.utils.formatUnits(data.durationCode, 0);
-      console.log(durationCode);
-      switch (durationCode) {
-        case "0":
-          return 3;
-        case "1":
-          return 6;
-        case "2":
-          return 12;
-        default:
-          return 0;
-      }
-    };
-    setDuration(calculateDurationCode());
-  }, [data]);
-
-  return (
-    <div className="mt-4" onClick={handleSelect}>
-      <div
-        className={`text-sm w-full h-32 rounded-lg border border-blue-500 p-5 flex flex-col md:flex-row gap-4 ${
-          isSelected
-            ? "bg-gradient-to-l from-cyan-500 to-blue-500"
-            : "bg-gray-900/75"
-        }`}
-      >
-        <div className="flex flex-col my-auto">
-          <div className="flex-1 flex flex-col gap-4">
-            <div className="text-white font-bold">
-              <span className="text-white text-4xl">{duration}</span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col gap-4">
-            <div
-              className={`font-bold ${
-                isSelected ? "text-gray-900/75" : "text-blue-500"
-              }`}
-            >
-              Months
-            </div>
-          </div>
-        </div>
-        <div className="flex-1 flex my-auto">
-          <div className="flex-1 flex flex-col gap-4">
-            <div className="text-white font-bold text-left">
-              <span
-                className={`font-bold ${
-                  isSelected ? "text-gray-900/75" : "text-blue-500"
-                }`}
-              >
-                Staked
-              </span>
-            </div>
-            <div className="text-white font-bold text-left">
-              <span
-                className={`font-bold ${
-                  isSelected ? "text-gray-900/75" : "text-blue-500"
-                }`}
-              >
-                Ends in
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col gap-4">
-            <div className="text-white font-bold text-right">
-              {parseFloat(ethers.utils.formatEther(data.amount)).toFixed(2)}{" "}
-            </div>
-            <div className="text-white font-bold text-right">
-              <Countdown
-                date={
-                  ethers.utils.formatUnits(data.stakeTime, 0) * 1000 +
-                  calculateDurationCode(data.durationCode) *
-                    30 *
-                    24 *
-                    60 *
-                    60 *
-                    1000
-                }
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex-1 flex my-auto">
-          <div className="flex-1 flex flex-col gap-4">
-            <div className="text-white font-bold text-left">
-              <span
-                className={`font-bold ${
-                  isSelected ? "text-gray-900/75" : "text-blue-500"
-                }`}
-              >
-                Rewards{" "}
-              </span>
-            </div>
-            <div className="text-white font-bold text-left">
-              <span
-                className={`font-bold ${
-                  isSelected ? "text-gray-900/75" : "text-blue-500"
-                }`}
-              >
-                APR{" "}
-              </span>
-            </div>
-          </div>
-          <div className="flex-1 flex flex-col gap-4">
-            <div className="text-white font-bold text-right">
-              {parseFloat(rewardsLocal).toFixed(4)}
-            </div>
-            <div className="text-white font-bold text-right">{apr} %</div>
-          </div>
-        </div>
-        <div className="flex flex-col my-auto">
-          <div className="flex-1 flex flex-col gap-4 mx-4 cursor-pointer">
-            <div className="text-white font-bold">
-              <span className="text-white text-4xl">
-                {isSelected ? "✕" : "+"}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+// const StakedCard = ({ index, selected, select, data, rewards, rate }) => {
+//   return (
+//     <div className="mt-4" onClick={select}>
+//       <div
+//         className={`text-sm w-full h-32 rounded-lg border border-blue-500 p-5 flex flex-col md:flex-row gap-4 ${
+//           selected[index]
+//             ? "bg-gradient-to-l from-cyan-500 to-blue-500"
+//             : "bg-gray-900/75"
+//         }`}
+//       >
+//         <div className="flex flex-col my-auto">
+//           <div className="flex-1 flex flex-col gap-4">
+//             <div className="text-white font-bold">
+//               <span className="text-white text-4xl">
+//                 {calculateDurationCode(data.durationCode)}
+//               </span>
+//             </div>
+//           </div>
+//           <div className="flex-1 flex flex-col gap-4">
+//             <div
+//               className={`font-bold ${
+//                 selected[index] ? "text-gray-900/75" : "text-blue-500"
+//               }`}
+//             >
+//               Months
+//             </div>
+//           </div>
+//         </div>
+//         <div className="flex-1 flex my-auto">
+//           <div className="flex-1 flex flex-col gap-4">
+//             <div className="text-white font-bold text-left">
+//               <span
+//                 className={`font-bold ${
+//                   selected[index] ? "text-gray-900/75" : "text-blue-500"
+//                 }`}
+//               >
+//                 Staked
+//               </span>
+//             </div>
+//             <div className="text-white font-bold text-left">
+//               <span
+//                 className={`font-bold ${
+//                   selected[index] ? "text-gray-900/75" : "text-blue-500"
+//                 }`}
+//               >
+//                 Ends in
+//               </span>
+//             </div>
+//           </div>
+//           <div className="flex-1 flex flex-col gap-4">
+//             <div className="text-white font-bold text-right">
+//               {parseFloat(ethers.utils.formatEther(data.amount)).toFixed(2)}{" "}
+//             </div>
+//             <div className="text-white font-bold text-right">
+//               <Countdown
+//                 date={
+//                   ethers.utils.formatUnits(data.stakeTime, 0) * 1000 +
+//                   calculateDurationCode(data.durationCode) *
+//                     30 *
+//                     24 *
+//                     60 *
+//                     60 *
+//                     1000
+//                 }
+//               />
+//             </div>
+//           </div>
+//         </div>
+//         <div className="flex-1 flex my-auto">
+//           <div className="flex-1 flex flex-col gap-4">
+//             <div className="text-white font-bold text-left">
+//               <span
+//                 className={`font-bold ${
+//                   selected[index] ? "text-gray-900/75" : "text-blue-500"
+//                 }`}
+//               >
+//                 Rewards{" "}
+//               </span>
+//             </div>
+//             <div className="text-white font-bold text-left">
+//               <span
+//                 className={`font-bold ${
+//                   selected[index] ? "text-gray-900/75" : "text-blue-500"
+//                 }`}
+//               >
+//                 APR{" "}
+//               </span>
+//             </div>
+//           </div>
+//           <div className="flex-1 flex flex-col gap-4">
+//             <div className="text-white font-bold text-right">
+//               {parseFloat(rewards[index]).toFixed(4)}
+//             </div>
+//             <div className="text-white font-bold text-right">
+//               {rate[data?.durationCode]} %
+//             </div>
+//           </div>
+//         </div>
+//         <div className="flex flex-col my-auto">
+//           <div className="flex-1 flex flex-col gap-4 mx-4 cursor-pointer">
+//             <div className="text-white font-bold">
+//               <span className="text-white text-4xl">
+//                 {selected[index] ? "✕" : "+"}
+//               </span>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 const LockedStakingCard = () => {
   const {
@@ -202,12 +165,10 @@ const LockedStakingCard = () => {
   }, []);
 
   useEffect(() => {
-    console.log(tokensStakedLocked);
     tokensStakedLocked.length && setStakedItems(tokensStakedLocked);
   }, [tokensStakedLocked]);
 
   useEffect(() => {
-    console.log(rewardsLocked);
     rewardsLocked.length && setRewardItems(rewardsLocked);
   }, [rewardsLocked]);
 
@@ -223,12 +184,6 @@ const LockedStakingCard = () => {
     }
   }, [account]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoadingState(false);
-    }, 8000);
-  }, []);
-
   const fetchStuff = async () => {
     // const [_balance, _tokensStaked, _reward, _apr] =
     await Promise.all([getTokensStakedLocked(), getRateLocked()]);
@@ -238,8 +193,6 @@ const LockedStakingCard = () => {
     // setApr(_apr);
   };
 
-  const [loadingState, setLoadingState] = useState(true);
-  const [spinState, setSpinState] = useState(loadingState);
   const [openState, setOpenState] = useState(false);
   const [newStakeModalOpen, setNewStakeModalOpen] = useState(false);
   const [forcedUnstakeModalOpen, setForcedUnstakeModalOpen] = useState(false);
@@ -250,39 +203,13 @@ const LockedStakingCard = () => {
   const [selectedStakes, setSelectedStakes] = useState([]);
   const [forcedUnstake, setForcedUnstake] = useState([]);
 
-  // const DATA = [
-  //   {
-  //     duration: "6",
-  //     aqua: "500",
-  //     endDate: Date.now(),
-  //     rewards: "0.2043",
-  //     apr: "20%",
-  //   },
-  //   {
-  //     duration: "9",
-  //     aqua: "500",
-  //     endDate: Date.now(),
-  //     rewards: "0.2043",
-  //     apr: "20%",
-  //   },
-  // ];
-
-  // useEffect(() => {
-  //   let _selectedStakes = [];
-  //   if (tokensStakedLocked) {
-  //     tokensStakedLocked.forEach((el, i) => {
-  //       _selectedStakes.push(false);
-  //     });
-  //   }
-  //   console.log(_selectedStakes);
-  //   setSelectedStakes(_selectedStakes);
-  // }, [tokensStakedLocked]);
-
   function handleSelect(i) {
     const _selectedStakes = selectedStakes;
     _selectedStakes[i] = !_selectedStakes[i];
     console.log(_selectedStakes);
-    setSelectedStakes(_selectedStakes);
+    setSelectedStakes([..._selectedStakes]);
+    console.log(tokensStakedLocked[i]);
+    console.log(idsStakedLocked[i]);
   }
 
   function handleSelectAll() {
@@ -310,23 +237,20 @@ const LockedStakingCard = () => {
   };
 
   const handleStake = async () => {
-    setLoadingState(true);
     await stakeLocked(toStake, durationCode);
     await fetchStuff();
-    setLoadingState(false);
-    setNewStakeModalOpen(false);
-    setStakedItems(tokensStakedLocked);
     setRewardItems(rewardsLocked);
     intialiseSelectedStakes(tokensStakedLocked.length);
+    setNewStakeModalOpen(false);
   };
 
   const intialiseSelectedStakes = (n) => {
     const newArray = Array(n).fill(false);
-    setSelectedStakes(newArray);
+    console.log(newArray);
+    setSelectedStakes([...newArray]);
   };
 
   async function handleClaim() {
-    setLoadingState(true);
     const toClaim = [];
     selectedStakes.forEach((el, i) => {
       if (el) {
@@ -337,10 +261,10 @@ const LockedStakingCard = () => {
       await claimRewardsLocked(toClaim);
     } else alert("Select at least one stake");
     await fetchStuff();
-    setLoadingState(false);
+    intialiseSelectedStakes(tokensStakedLocked.length);
   }
 
-  const handleUnstake = () => {
+  const handleUnstake = async () => {
     const toUnstake = [];
     const toUnstakeForced = [];
     const isForced = (stakeTime, durationCode) => {
@@ -367,18 +291,26 @@ const LockedStakingCard = () => {
     if (toUnstakeForced.length) {
       setForcedUnstake(toUnstakeForced);
       setForcedUnstakeModalOpen(true);
-    } else if (toUnstake.length) withdrawLocked(toUnstake);
-    else alert("Select at least one stake");
-    intialiseSelectedStakes(tokensStakedLocked.length);
-    setStakedItems(tokensStakedLocked);
-    setRewardItems(rewardsLocked);
+      return;
+    } else if (toUnstake.length) {
+      const transaction = await withdrawLocked(toUnstake);
+      await transaction.wait();
+      console.log("fething stuff");
+      await fetchStuff();
+      setStakedItems(tokensStakedLocked);
+      setRewardItems(rewardsLocked);
+      intialiseSelectedStakes(tokensStakedLocked.length);
+    } else alert("Select at least one stake");
   };
 
   const handleForcedWithdraw = async () => {
-    setLoadingState(true);
     await withdrawLockedForced(forcedUnstake);
-    setForcedUnstakeModalOpen(false);
-    setLoadingState(false);
+    fetchStuff().then(() => {
+      setStakedItems(tokensStakedLocked);
+      setRewardItems(rewardsLocked);
+      setForcedUnstakeModalOpen(false);
+      intialiseSelectedStakes(tokensStakedLocked.length);
+    });
   };
 
   return (
@@ -396,45 +328,132 @@ const LockedStakingCard = () => {
         {openState && (
           <div>
             <div className="flex flex-col mt-6 h-96 overflow-scroll">
-              {loadingState ? (
-                <div className="w-full h-full flex items-center justify-center">
-                  <svg
-                    role="status"
-                    class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                    viewBox="0 0 100 101"
-                    width={50}
-                    height={50}
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                      fill="currentFill"
-                    />
-                  </svg>
-                </div>
-              ) : stakedItems.length ? (
-                stakedItems.map((data, i) => {
-                  return (
-                    <StakedCard
-                      key={i}
-                      index={i}
-                      selected={selectedStakes}
-                      select={() => handleSelect(i)}
-                      data={data}
-                      rewards={rewardItems}
-                      rate={rateLocked}
-                    />
-                  );
-                })
+              {stakedItems.length ? (
+                stakedItems.map((data, i) => (
+                  <div className="mt-4" onClick={() => handleSelect(i)}>
+                    <div
+                      className={`text-sm w-full h-32 rounded-lg border border-blue-500 p-5 flex flex-col md:flex-row gap-4 ${
+                        selectedStakes[i]
+                          ? "bg-gradient-to-l from-cyan-500 to-blue-500"
+                          : "bg-gray-900/75"
+                      }`}
+                    >
+                      <div className="flex flex-col my-auto">
+                        <div className="flex-1 flex flex-col gap-4">
+                          <div className="text-white font-bold">
+                            <span className="text-white text-4xl">
+                              {calculateDurationCode(data.durationCode)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex-1 flex flex-col gap-4">
+                          <div
+                            className={`font-bold ${
+                              selectedStakes[i]
+                                ? "text-gray-900/75"
+                                : "text-blue-500"
+                            }`}
+                          >
+                            Months
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex-1 flex my-auto">
+                        <div className="flex-1 flex flex-col gap-4">
+                          <div className="text-white font-bold text-left">
+                            <span
+                              className={`font-bold ${
+                                selectedStakes[i]
+                                  ? "text-gray-900/75"
+                                  : "text-blue-500"
+                              }`}
+                            >
+                              Staked
+                            </span>
+                          </div>
+                          <div className="text-white font-bold text-left">
+                            <span
+                              className={`font-bold ${
+                                selectedStakes[i]
+                                  ? "text-gray-900/75"
+                                  : "text-blue-500"
+                              }`}
+                            >
+                              Ends in
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex-1 flex flex-col gap-4">
+                          <div className="text-white font-bold text-right">
+                            {parseFloat(
+                              ethers.utils.formatEther(data.amount)
+                            ).toFixed(2)}{" "}
+                          </div>
+                          <div className="text-white font-bold text-right">
+                            <Countdown
+                              date={
+                                ethers.utils.formatUnits(data.stakeTime, 0) *
+                                  1000 +
+                                calculateDurationCode(data.durationCode) *
+                                  30 *
+                                  24 *
+                                  60 *
+                                  60 *
+                                  1000
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex-1 flex my-auto">
+                        <div className="flex-1 flex flex-col gap-4">
+                          <div className="text-white font-bold text-left">
+                            <span
+                              className={`font-bold ${
+                                selectedStakes[i]
+                                  ? "text-gray-900/75"
+                                  : "text-blue-500"
+                              }`}
+                            >
+                              Rewards{" "}
+                            </span>
+                          </div>
+                          <div className="text-white font-bold text-left">
+                            <span
+                              className={`font-bold ${
+                                selectedStakes[i]
+                                  ? "text-gray-900/75"
+                                  : "text-blue-500"
+                              }`}
+                            >
+                              APR{" "}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex-1 flex flex-col gap-4">
+                          <div className="text-white font-bold text-right">
+                            {parseFloat(rewardItems[i]).toFixed(4)}
+                          </div>
+                          <div className="text-white font-bold text-right">
+                            {rateLocked[data?.durationCode]} %
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col my-auto">
+                        <div className="flex-1 flex flex-col gap-4 mx-4 cursor-pointer">
+                          <div className="text-white font-bold">
+                            <span className="text-white text-4xl">
+                              {selectedStakes[i] ? "✕" : "+"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-white">
-                  You current don't have any locked stakes. Click on Stake New
-                  button to create one.
+                  Click the Stake button to see options.
                 </div>
               )}
             </div>
@@ -447,7 +466,7 @@ const LockedStakingCard = () => {
                   <span className="text-blue-500 mr-2 font-medium -mt-1 text-2xl">
                     +
                   </span>
-                  Stake new
+                  Stake
                 </button>
               </div>
               <div className="flex gap-3">
@@ -456,7 +475,7 @@ const LockedStakingCard = () => {
                   onClick={handleClaim}
                 >
                   <img src={"./wallet.png"} className="w-5 mr-3" />
-                  Claim rewards
+                  Claim Rewards
                 </button>
                 <button
                   class="font-bold text-white inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
@@ -476,7 +495,7 @@ const LockedStakingCard = () => {
               overlayClassName="Overlay"
             >
               <div className="flex-1 mt-8 md:mt-0 mx-10 sm:mx-auto max-w-md">
-                <div className="bg-gray-900/90 text-white w-full h-full rounded-lg border border-blue-500 p-5 flex flex-col">
+                <div className="bg-gray-900 text-white w-full h-full rounded-lg border border-blue-500 p-5 flex flex-col justify-center">
                   <div className="text-blue-500 text-left">
                     Deposit your Tokens
                   </div>
@@ -549,44 +568,27 @@ const LockedStakingCard = () => {
                     <div className="my-auto">
                       <span className="text-blue-500">APR: </span>
                       <span className="ml-1 text-white-600">
-                        {rateLocked[durationCode]} %
+                        {rateLocked[durationCode]}%
                       </span>
                       <span className="text-blue-500 ml-2">
                         Early withdrawal fees:{" "}
                       </span>
                       <span className="ml-1 text-white-600">
-                        {withdrawalFees[durationCode]} %
+                        {withdrawalFees[durationCode]}%
                       </span>
                     </div>
                   </div>
 
-                  <div className="mt-4 flex gap-4 justify-center">
+                  <div className="text-white flex text-center text-sm mt-4 self-center">
+                    Deposit Fee: 2% sent to burn wallet
+                  </div>
+
+                  <div className="mt-2 flex gap-4 justify-center">
                     <button
                       class="font-bold text-white inline-flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 border-0 py-2 px-6 focus:outline-none rounded text-base mt-4 md:mt-0"
                       onClick={handleStake}
                     >
-                      {loadingState ? (
-                        <svg
-                          role="status"
-                          class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                          viewBox="0 0 100 101"
-                          width={50}
-                          height={50}
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                            fill="currentColor"
-                          />
-                          <path
-                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                            fill="currentFill"
-                          />
-                        </svg>
-                      ) : (
-                        "Stake"
-                      )}
+                      Stake
                     </button>
                     <button
                       class="font-bold text-white inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
@@ -605,7 +607,7 @@ const LockedStakingCard = () => {
               overlayClassName="Overlay"
             >
               <div className="flex-1 mt-8 md:mt-0 mx-10 sm:mx-auto max-w-md">
-                <div className="bg-gray-900/90 text-white w-full h-full rounded-lg border border-blue-500 p-5 flex flex-col">
+                <div className="bg-gray-900 text-white w-full h-full rounded-lg border border-blue-500 p-5 flex flex-col">
                   <div className="text-blue-500 text-left">
                     You're trying to unstake {forcedUnstake.length} stakes which
                     are not unlocked yet. Are you sure?
@@ -616,28 +618,7 @@ const LockedStakingCard = () => {
                       class="font-bold text-white inline-flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 border-0 py-2 px-6 focus:outline-none rounded text-base mt-4 md:mt-0"
                       onClick={handleForcedWithdraw}
                     >
-                      {loadingState ? (
-                        <svg
-                          role="status"
-                          class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                          viewBox="0 0 100 101"
-                          width={50}
-                          height={50}
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                            fill="currentColor"
-                          />
-                          <path
-                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                            fill="currentFill"
-                          />
-                        </svg>
-                      ) : (
-                        "Force Unstake"
-                      )}
+                      Force Unstake
                     </button>
                     <button
                       class="font-bold text-white inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0"
