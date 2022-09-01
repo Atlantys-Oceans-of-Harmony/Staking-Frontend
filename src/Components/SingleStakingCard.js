@@ -1,6 +1,10 @@
 import React from "react";
 import Web3Context from "../Contexts/Web3Context";
 import { useContext, useEffect, useState, Fragment } from "react";
+import walletImg from "../assets/wallet.png";
+import aquaImg from "../assets/aqua.png";
+import downImg from "../assets/down.png";
+import harmonyImg from "../assets/harmony.png";
 
 const SingleStakingCard = () => {
   const {
@@ -214,7 +218,7 @@ const SingleStakingCard = () => {
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxStake}
                           >
-                            <img src="/wallet.png" className="w-4 mr-1" />
+                            <img src={walletImg} className="w-4 mr-1" />
                             Max
                           </button>
                         </div>
@@ -277,7 +281,7 @@ const SingleStakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img src="/wallet.png" className="w-5 mr-3" />
+                              <img src={walletImg} className="w-5 mr-3" />
                               Stake
                             </>
                           )}
@@ -309,7 +313,7 @@ const SingleStakingCard = () => {
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxUnstake}
                           >
-                            <img src="/wallet.png" className="w-4 mr-1" />
+                            <img src={walletImg} className="w-4 mr-1" />
                             Max
                           </button>
                         </div>
@@ -340,7 +344,7 @@ const SingleStakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img src="./wallet.png" className="w-5 mr-3" />
+                              <img src={walletImg} className="w-5 mr-3" />
                               Unstake
                             </>
                           )}
@@ -362,7 +366,7 @@ const SingleStakingCard = () => {
       <div className="flex flex-col">
         <div className="flex justify-between">
           <div className="flex">
-            <img src="./aqua.png" className="w-7 h-7 mr-1" />
+            <img src={aquaImg} className="w-7 h-7 mr-1" />
             <div className="text-left text-xl font-bold">AQUA</div>
             <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
               APR {aprSingle}%
@@ -370,7 +374,7 @@ const SingleStakingCard = () => {
           </div>
 
           <div onClick={handleToggleOpenState}>
-            <img src="./down.png" className="w-8 p-2  cursor-pointer" />
+            <img src={downImg} className="w-8 p-2  cursor-pointer" />
           </div>
         </div>
         {openState && (

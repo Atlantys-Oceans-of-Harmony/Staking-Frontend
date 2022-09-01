@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Web3Context from "../Contexts/Web3Context";
+import aquaImg from "../assets/aqua.png";
 
 const InfoCard = (props) => {
   return (
@@ -57,7 +58,7 @@ export default function Info() {
         <div>
           <div className="bg-gray-900/75 w-full h-full rounded-xl border-t md:border-t-0 md:border-l border-blue-600  p-5 md:p-10 flex flex-col">
             <div className="flex justify-center">
-              <img src="./aqua.png" className="w-7 h-7 mr-2 " />
+              <img src={aquaImg} className="w-7 h-7 mr-2 " />
               <span className="text-white text-xl font-medium">
                 Total Rewards
               </span>
