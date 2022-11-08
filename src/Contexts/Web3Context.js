@@ -225,7 +225,7 @@ export const Web3Provider = (props) => {
       ethereum.on("chainChanged", onChainChanged);
       ethereum.on("accountsChanged", onAccountsChanged);
       setAccount(accounts[0]);
-      // setAccount("0xaC7245b6031c0405fE00DF1033b97E966C5193b6");
+      // setAccount("0x6618af3Fe00C0eC3DE8cf3e62d65ef4e01D11759");
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const _signer = provider.getSigner();

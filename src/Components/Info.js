@@ -15,15 +15,10 @@ export default function Info() {
     connectWallet,
     getEarned,
     getReward,
-    stake,
-    withdraw,
-    rewardPerToken,
-    getTokensStaked,
-
-    getBalance,
-    approveStaking,
     getRewardsLocked,
     reward,
+    getRewardsSingle,
+    rewardsSingle,
     rewardsLocked,
     rewardsRarity,
     getTokensStakedLocked,
@@ -38,12 +33,14 @@ export default function Info() {
       getReward(),
       getTokensStakedLocked(),
       getRewardsLocked(),
+      getRewardsSingle(),
     ]).then(() => {
       getEarned().then((_reward) => {
         setLoading(false);
       });
     });
   }
+  console.log(reward, rewardsRarity, _sum);
 
   return (
     <div className=" bg-gradient-to-l from-cyan-500 to-blue-500 flex flex-col sm:flex-row py-10 justify-center px-5">
@@ -64,9 +61,14 @@ export default function Info() {
             </div>
 
             <div className="text-white text-center text-left mt-2 font-bold text-4xl">
-              {(!isNaN(reward) ? reward : 0) +
-                (!isNaN(rewardsRarity) ? rewardsRarity : 0) +
-                _sum.toFixed(4)}{" "}
+              {parseFloat(
+                parseFloat(
+                  (!isNaN(reward) ? reward : 0) +
+                    (!isNaN(rewardsRarity) ? rewardsRarity : 0) +
+                    parseFloat(_sum) +
+                    parseFloat(rewardsSingle)
+                ).toFixed(4)
+              )}{" "}
               AQUA
             </div>
 

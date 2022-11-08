@@ -214,7 +214,7 @@ const SingleStakingCard = () => {
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxStake}
                           >
-                            <img src="/wallet.png" className="w-4 mr-1" />
+                            <img src="./wallet.png" className="w-4 mr-1" />
                             Max
                           </button>
                         </div>
@@ -277,7 +277,7 @@ const SingleStakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img src="/wallet.png" className="w-5 mr-3" />
+                              <img src="./wallet.png" className="w-5 mr-3" />
                               Stake
                             </>
                           )}
@@ -309,7 +309,7 @@ const SingleStakingCard = () => {
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxUnstake}
                           >
-                            <img src="/wallet.png" className="w-4 mr-1" />
+                            <img src="./wallet.png" className="w-4 mr-1" />
                             Max
                           </button>
                         </div>

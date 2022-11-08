@@ -1,0 +1,62 @@
+[debug] [2022-05-02T18:51:54.289Z] ----------------------------------------------------------------------
+[debug] [2022-05-02T18:51:54.290Z] Command:       /opt/homebrew/Cellar/node/17.8.0/bin/node /opt/homebrew/bin/firebase deploy
+[debug] [2022-05-02T18:51:54.290Z] CLI Version:   10.6.0
+[debug] [2022-05-02T18:51:54.290Z] Platform:      darwin
+[debug] [2022-05-02T18:51:54.290Z] Node Version:  v17.8.0
+[debug] [2022-05-02T18:51:54.293Z] Time:          Tue May 03 2022 00:21:54 GMT+0530 (India Standard Time)
+[debug] [2022-05-02T18:51:54.293Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-02T18:51:54.322Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-02T18:51:54.322Z] > authorizing via signed-in user (anshumansingh64@gmail.com)
+[debug] [2022-05-02T18:51:54.322Z] [iam] checking project atlantys-staking for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-02T18:51:54.323Z] > refreshing access token with scopes: []
+[debug] [2022-05-02T18:51:54.323Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-05-02T18:51:54.547Z] <<< HTTP RESPONSE 200 {"pragma":"no-cache","cache-control":"no-cache, no-store, max-age=0, must-revalidate","date":"Mon, 02 May 2022 18:51:54 GMT","expires":"Mon, 01 Jan 1990 00:00:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2022-05-02T18:51:54.598Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/atlantys-staking:testIamPermissions [none]
+[debug] [2022-05-02T18:51:54.599Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/atlantys-staking:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-02T18:51:56.239Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/atlantys-staking:testIamPermissions 200
+[debug] [2022-05-02T18:51:56.239Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/atlantys-staking:testIamPermissions {}
+[debug] [2022-05-02T18:51:56.240Z] [iam] error while checking permissions, command may fail: FirebaseError: Authorization failed. This account is missing the following required permissions on project atlantys-staking:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2022-05-02T18:51:56.241Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/atlantys-staking [none]
+[debug] [2022-05-02T18:51:56.986Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/atlantys-staking 403
+[debug] [2022-05-02T18:51:56.987Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/atlantys-staking {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2022-05-02T18:51:56.988Z] HTTP Error: 403, The caller does not have permission
+[debug] [2022-05-02T18:51:57.178Z] FirebaseError: HTTP Error: 403, The caller does not have permission
+    at module.exports (/opt/homebrew/lib/node_modules/firebase-tools/lib/responseToError.js:47:12)
+    at RetryOperation._fn (/opt/homebrew/lib/node_modules/firebase-tools/lib/apiv2.js:286:39)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+[error] 
+[error] Error: Failed to get Firebase project atlantys-staking. Please make sure the project exists and your account has permission to access it.
+[debug] [2022-05-02T18:53:51.046Z] ----------------------------------------------------------------------
+[debug] [2022-05-02T18:53:51.047Z] Command:       /opt/homebrew/Cellar/node/17.8.0/bin/node /opt/homebrew/bin/firebase deploy
+[debug] [2022-05-02T18:53:51.047Z] CLI Version:   10.6.0
+[debug] [2022-05-02T18:53:51.047Z] Platform:      darwin
+[debug] [2022-05-02T18:53:51.047Z] Node Version:  v17.8.0
+[debug] [2022-05-02T18:53:51.048Z] Time:          Tue May 03 2022 00:23:51 GMT+0530 (India Standard Time)
+[debug] [2022-05-02T18:53:51.048Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-02T18:53:51.078Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-02T18:53:51.078Z] > authorizing via signed-in user (anshumansingh64@gmail.com)
+[debug] [2022-05-02T18:53:51.078Z] [iam] checking project atlantys-staking for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-02T18:53:51.079Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/atlantys-staking:testIamPermissions [none]
+[debug] [2022-05-02T18:53:51.079Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/atlantys-staking:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-02T18:53:52.827Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/atlantys-staking:testIamPermissions 200
+[debug] [2022-05-02T18:53:52.827Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/atlantys-staking:testIamPermissions {}
+[debug] [2022-05-02T18:53:52.827Z] [iam] error while checking permissions, command may fail: FirebaseError: Authorization failed. This account is missing the following required permissions on project atlantys-staking:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2022-05-02T18:53:52.829Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/atlantys-staking [none]
+[debug] [2022-05-02T18:53:53.717Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/atlantys-staking 403
+[debug] [2022-05-02T18:53:53.718Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/atlantys-staking {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2022-05-02T18:53:53.719Z] HTTP Error: 403, The caller does not have permission
+[debug] [2022-05-02T18:53:54.219Z] FirebaseError: HTTP Error: 403, The caller does not have permission
+    at module.exports (/opt/homebrew/lib/node_modules/firebase-tools/lib/responseToError.js:47:12)
+    at RetryOperation._fn (/opt/homebrew/lib/node_modules/firebase-tools/lib/apiv2.js:286:39)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+[error] 
+[error] Error: Failed to get Firebase project atlantys-staking. Please make sure the project exists and your account has permission to access it.
