@@ -1,6 +1,10 @@
 import React from "react";
 import Web3Context from "../Contexts/Web3Context";
 import { useContext, useEffect, useState, Fragment } from "react";
+import walletImg from "../assets/wallet.png";
+import aquaImg from "../assets/aqua.png";
+import downImg from "../assets/down.png";
+import harmonyImg from "../assets/harmony.png";
 
 const LPStakingCard = () => {
   const {
@@ -59,9 +63,9 @@ const LPStakingCard = () => {
     setTokensStaked(_tokensStaked);
     setReward(_reward);
     console.log(_totalSupply);
-    console.log(_rewardRate);
-    const _apr = (_rewardRate * 365) / _totalSupply;
-    setApr(parseFloat(_apr).toFixed(2));
+    console.log("Reaward Rate", _rewardRate);
+    // const _apr = (_rewardRate * 365) / _totalSupply;
+    // setApr(parseFloat(_apr).toFixed(2));
   };
 
   function handleClaim() {
@@ -144,7 +148,7 @@ const LPStakingCard = () => {
                 className="flex mb-0 list-none flex-wrap pt-3 flex-row"
                 role="tablist"
               >
-                <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                {/* <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
                   <a
                     className={
                       "text-xs font-bold items-center uppercase py-3 shadow-lg rounded-lg block leading-normal " +
@@ -162,12 +166,12 @@ const LPStakingCard = () => {
                   >
                     Stake
                   </a>
-                </li>
+                </li> */}
                 <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
                   <a
                     className={
                       "text-xs font-bold  items-center uppercase py-3 shadow-lg rounded-lg block leading-normal " +
-                      (openTab === 3
+                      (openTab === 2
                         ? "border border-blue-600 text-white bg-gradient-to-l from-cyan-500 to-blue-500"
                         : "border border-blue-600 text-blue-500")
                     }
@@ -216,7 +220,7 @@ const LPStakingCard = () => {
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxStake}
                           >
-                            <img src="./wallet.png" className="w-4 mr-1" />
+                            <img src={walletImg} className="w-4 mr-1" />
                             Max
                           </button>
                         </div>
@@ -274,7 +278,7 @@ const LPStakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img src="./wallet.png" className="w-5 mr-3" />
+                              <img src={walletImg} className="w-5 mr-3" />
                               Stake
                             </>
                           )}
@@ -306,7 +310,7 @@ const LPStakingCard = () => {
                             class="font-bold text-blue-500 inline-flex items-center bg-gray-800 border-0 py-1 px-2 focus:outline-none hover:bg-gray-700 rounded mt-4 md:mt-0"
                             onClick={handleMaxUnstake}
                           >
-                            <img src="./wallet.png" className="w-4 mr-1" />
+                            <img src={walletImg} className="w-4 mr-1" />
                             Max
                           </button>
                         </div>
@@ -337,7 +341,7 @@ const LPStakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img src="./wallet.png" className="w-5 mr-3" />
+                              <img src={walletImg} className="w-5 mr-3" />
                               Unstake
                             </>
                           )}
@@ -359,17 +363,17 @@ const LPStakingCard = () => {
       <div className="flex flex-col">
         <div className="flex justify-between">
           <div className="flex">
-            <img src="./harmony.png" className="w-5 h-5 mr-1 mt-1" />
-            <img src="./aqua.png" className="w-7 h-7 mr-1 z-10 -ml-2" />
+            <img src={harmonyImg} className="w-5 h-5 mr-1 mt-1" />
+            <img src={aquaImg} className="w-7 h-7 mr-1 z-10 -ml-2" />
 
             <div className="text-left text-xl font-bold">AQUA/ONE</div>
-            <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
+            {/* <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
               APR {apr}%
-            </div>
+            </div> */}
           </div>
 
           <div onClick={handleToggleOpenState}>
-            <img src="./down.png" className="w-8 p-2  cursor-pointer" />
+            <img src={downImg} className="w-8 p-2  cursor-pointer" />
           </div>
         </div>
         {openState ? (
@@ -412,7 +416,7 @@ const LPStakingCard = () => {
                       {parseFloat(reward).toFixed(4)} AQUA
                     </div>
 
-                    <div className="mt-4">
+                    {/* <div className="mt-4">
                       <button
                         class="font-bold text-white inline-flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-sm my-2"
                         onClick={handleClaim}
@@ -440,7 +444,7 @@ const LPStakingCard = () => {
                           "Claim"
                         )}
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

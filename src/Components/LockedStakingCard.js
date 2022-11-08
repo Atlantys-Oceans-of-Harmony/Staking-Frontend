@@ -5,6 +5,9 @@ import Modal from "react-modal";
 import "./style.css";
 import { ethers } from "ethers";
 import Countdown from "react-countdown";
+import walletImg from "../assets/wallet.png";
+import aquaImg from "../assets/aqua.png";
+import downImg from "../assets/down.png";
 
 const calculateDurationCode = (durationCode = 0) => {
   const _durationCode = ethers.utils.formatUnits(durationCode, 0);
@@ -317,11 +320,11 @@ const LockedStakingCard = () => {
       <div className="flex flex-col">
         <div className="flex justify-between">
           <div className="flex">
-            <img src="./aqua.png" className="w-7 h-7 mr-1" />
+            <img src={aquaImg} className="w-7 h-7 mr-1" />
             <div className="text-left text-xl font-bold">AQUA LOCKED</div>
           </div>
           <div onClick={handleToggleOpenState}>
-            <img src="./down.png" className="w-8 p-2  cursor-pointer" />
+            <img src={downImg} className="w-8 p-2  cursor-pointer" />
           </div>
         </div>
         {openState && (
@@ -473,7 +476,7 @@ const LockedStakingCard = () => {
                   class={`font-bold text-white inline-flex items-center bg-gray-800 border-0 py-2 px-6 focus:outline-none rounded text-base mt-4 md:mt-0`}
                   onClick={handleClaim}
                 >
-                  <img src={"./wallet.png"} className="w-5 mr-3" />
+                  <img src={walletImg} className="w-5 mr-3" />
                   Claim Rewards
                 </button>
                 <button

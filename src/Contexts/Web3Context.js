@@ -29,8 +29,8 @@ const NATIVE_CURRENCY = {
   decimals: 18,
 };
 const CHAIN_NAME = "Harmony Mainnet";
-const STAKING_CONTRACT_ADDRESS = "0xcc0E08340359a15822020E9F6E47FDF5B76FCb30";
-const LP_CONTRACT_ADDRESS = "0xc4320103757aDA1A8cC43273ac35bdc4E0da6093";
+const STAKING_CONTRACT_ADDRESS = "0x1976302E284901eBBa0A3905dfd24f1B23EE4FA7";
+const LP_CONTRACT_ADDRESS = "0x0a5Dd9eca1D87BC60e4dbbe7734Eb00C0cAf5ECd";
 const UNIVERSE_CONTRACT_ADDRESS = "0x1a5b1109f04cc3f45d4c533685a347656d0983e4";
 // const UNIVERSE_CONTRACT_ADDRESS = "0xd2998765f004a3B40C65aF2f8FA90dBC81BF66c7"; //testnet
 const SINGLE_STAKING_CONTRACT_ADDRESS =
@@ -177,7 +177,7 @@ export const Web3Provider = (props) => {
   // Fetch stuff every second
   useEffect(() => {
     const interval = setInterval(() => {
-      functionsToExport.fetchStuff();
+      account && functionsToExport.fetchStuff();
     }, 10000);
 
     return () => clearInterval(interval);
@@ -236,7 +236,6 @@ export const Web3Provider = (props) => {
   // this is get reward
   functionsToExport.getEarned = async () => {
     try {
-      console.log(account);
       const result = await contractObjects?.stakingContract?.earned(account);
       console.log(utils?.formatEther(result?.toString()));
       setReward(parseFloat(utils?.formatEther(result?.toString())).toFixed(2));

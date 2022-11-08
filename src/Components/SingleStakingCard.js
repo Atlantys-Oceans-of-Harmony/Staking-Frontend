@@ -1,6 +1,10 @@
 import React from "react";
 import Web3Context from "../Contexts/Web3Context";
 import { useContext, useEffect, useState, Fragment } from "react";
+import walletImg from "../assets/wallet.png";
+import aquaImg from "../assets/aqua.png";
+import downImg from "../assets/down.png";
+import harmonyImg from "../assets/harmony.png";
 
 const SingleStakingCard = () => {
   const {
@@ -340,7 +344,7 @@ const SingleStakingCard = () => {
                             </svg>
                           ) : (
                             <>
-                              <img src="./wallet.png" className="w-5 mr-3" />
+                              <img src={walletImg} className="w-5 mr-3" />
                               Unstake
                             </>
                           )}
@@ -362,7 +366,7 @@ const SingleStakingCard = () => {
       <div className="flex flex-col">
         <div className="flex justify-between">
           <div className="flex">
-            <img src="./aqua.png" className="w-7 h-7 mr-1" />
+            <img src={aquaImg} className="w-7 h-7 mr-1" />
             <div className="text-left text-xl font-bold">AQUA</div>
             <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
               APR {aprSingle}%
@@ -370,7 +374,7 @@ const SingleStakingCard = () => {
           </div>
 
           <div onClick={handleToggleOpenState}>
-            <img src="./down.png" className="w-8 p-2  cursor-pointer" />
+            <img src={downImg} className="w-8 p-2  cursor-pointer" />
           </div>
         </div>
         {openState && (
