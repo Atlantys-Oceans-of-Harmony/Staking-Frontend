@@ -63,9 +63,9 @@ const LPStakingCard = () => {
     setTokensStaked(_tokensStaked);
     setReward(_reward);
     console.log(_totalSupply);
-    console.log(_rewardRate);
-    const _apr = (_rewardRate * 365) / _totalSupply;
-    setApr(parseFloat(_apr).toFixed(2));
+    console.log("Reaward Rate", _rewardRate);
+    // const _apr = (_rewardRate * 365) / _totalSupply;
+    // setApr(parseFloat(_apr).toFixed(2));
   };
 
   function handleClaim() {
@@ -367,9 +367,9 @@ const LPStakingCard = () => {
             <img src={aquaImg} className="w-7 h-7 mr-1 z-10 -ml-2" />
 
             <div className="text-left text-xl font-bold">AQUA/ONE</div>
-            <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
+            {/* <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
               APR {apr}%
-            </div>
+            </div> */}
           </div>
 
           <div onClick={handleToggleOpenState}>
