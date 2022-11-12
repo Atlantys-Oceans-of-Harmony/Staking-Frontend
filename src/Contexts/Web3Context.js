@@ -31,6 +31,9 @@ const NATIVE_CURRENCY = {
 const CHAIN_NAME = "Harmony Mainnet";
 const STAKING_CONTRACT_ADDRESS = "0x1976302E284901eBBa0A3905dfd24f1B23EE4FA7";
 const LP_CONTRACT_ADDRESS = "0x0a5Dd9eca1D87BC60e4dbbe7734Eb00C0cAf5ECd";
+const STAKING_CONTRACT_ADDRESS_NEW =
+  "0x1976302E284901eBBa0A3905dfd24f1B23EE4FA7";
+const LP_CONTRACT_ADDRESS_NEW = "0x0a5Dd9eca1D87BC60e4dbbe7734Eb00C0cAf5ECd";
 const UNIVERSE_CONTRACT_ADDRESS = "0x1a5b1109f04cc3f45d4c533685a347656d0983e4";
 // const UNIVERSE_CONTRACT_ADDRESS = "0xd2998765f004a3B40C65aF2f8FA90dBC81BF66c7"; //testnet
 const SINGLE_STAKING_CONTRACT_ADDRESS =
@@ -63,6 +66,10 @@ export const Web3Provider = (props) => {
   const [tokensStaked, setTokensStaked] = useState("0.0");
   const [reward, setReward] = useState("0.0");
   const [apr, setApr] = useState("~");
+  const [balanceNew, setBalanceNew] = useState("0.0");
+  const [tokensStakedNew, setTokensStakedNew] = useState("0.0");
+  const [rewardNew, setRewardNew] = useState("0.0");
+  const [aprNew, setAprNew] = useState("~");
   const [update, setUpdate] = useState(0);
 
   const [rewardsSingle, setRewardsSingle] = useState("0.0");
@@ -139,6 +146,16 @@ export const Web3Provider = (props) => {
       stakingAbi,
       _signer
     );
+    const lpContractNew = new ethers.Contract(
+      LP_CONTRACT_ADDRESS_NEW,
+      lpAbi,
+      _signer
+    );
+    const stakingContractNew = new ethers.Contract(
+      STAKING_CONTRACT_ADDRESS_NEW,
+      stakingAbi,
+      _signer
+    );
     const singleStakingContract = new ethers.Contract(
       SINGLE_STAKING_CONTRACT_ADDRESS,
       singleStakingAbi,
@@ -154,7 +171,9 @@ export const Web3Provider = (props) => {
     const _contractObjects = {
       universeContract,
       lpContract,
+      lpContractNew,
       stakingContract,
+      stakingContractNew,
       singleStakingContract,
       lockedStakingContract,
     };
@@ -188,10 +207,15 @@ export const Web3Provider = (props) => {
   functionsToExport.fetchStuff = async () => {
     const [
       _balance,
+      _balanceNew,
       _tokensStaked,
       _reward,
       _totalSupply,
       _rewardRate,
+      _tokensStakedNew,
+      _rewardNew,
+      _totalSupplyNew,
+      _rewardRateNew,
       _rewardsSingle,
       _tokensStakedSingle,
       _balanceSingle,
@@ -199,10 +223,15 @@ export const Web3Provider = (props) => {
       _tokensStakedLocked,
     ] = await Promise.all([
       functionsToExport.getBalance(),
+      functionsToExport.getBalanceNew(),
       functionsToExport.getTokensStaked(),
       functionsToExport.getEarned(),
       functionsToExport.getTotalSupply(),
       functionsToExport.getRewardRate(),
+      functionsToExport.getTokensStakedNew(),
+      functionsToExport.getEarnedNew(),
+      functionsToExport.getTotalSupplyNew(),
+      functionsToExport.getRewardRateNew(),
       functionsToExport.getRewardsSingle(),
       functionsToExport.getTokensStakedSingle(),
       functionsToExport.getBalanceSingle(),
@@ -210,10 +239,15 @@ export const Web3Provider = (props) => {
       functionsToExport.getTokensStakedLocked(),
     ]);
     setBalance(parseFloat(_balance).toFixed(2));
+    setBalanceNew(parseFloat(_balanceNew).toFixed(2));
     setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
+    setTokensStakedNew(parseFloat(_tokensStakedNew).toFixed(1));
     setReward(parseFloat(_reward).toFixed(2));
+    setRewardNew(parseFloat(_rewardNew).toFixed(2));
     const _apr = (_rewardRate * 365) / _totalSupply;
+    const _aprNew = (_rewardRateNew * 365) / _totalSupplyNew;
     setApr(parseFloat(_apr).toFixed(2));
+    setAprNew(parseFloat(_aprNew).toFixed(2));
   };
 
   functionsToExport.connectWallet = async (defaultAccount = -1) => {
@@ -244,6 +278,18 @@ export const Web3Provider = (props) => {
       console.log(e);
     }
   };
+  functionsToExport.getEarnedNew = async () => {
+    try {
+      const result = await contractObjects?.stakingContractNew?.earned(account);
+      console.log(utils?.formatEther(result?.toString()));
+      setRewardNew(
+        parseFloat(utils?.formatEther(result?.toString())).toFixed(2)
+      );
+      return utils?.formatEther(result?.toString());
+    } catch (e) {
+      console.log(e);
+    }
+  };
   functionsToExport.getRewardsSingle = async () => {
     try {
       const result = await contractObjects?.singleStakingContract?.getRewards(
@@ -262,6 +308,16 @@ export const Web3Provider = (props) => {
   functionsToExport.getTokensStaked = async () => {
     try {
       const result = await contractObjects?.stakingContract?.balances(account);
+      return utils?.formatEther(result.toString());
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  functionsToExport.getTokensStakedNew = async () => {
+    try {
+      const result = await contractObjects?.stakingContractNew?.balances(
+        account
+      );
       return utils?.formatEther(result.toString());
     } catch (e) {
       console.log(e);
@@ -326,6 +382,14 @@ export const Web3Provider = (props) => {
       console.log(e);
     }
   };
+  functionsToExport.getBalanceNew = async () => {
+    try {
+      const result = await contractObjects?.lpContractNew?.balanceOf(account);
+      return utils?.formatEther(result.toString());
+    } catch (e) {
+      console.log(e);
+    }
+  };
   functionsToExport.getBalanceSingle = async () => {
     try {
       const result = await contractObjects?.universeContract?.balanceOf(
@@ -346,10 +410,27 @@ export const Web3Provider = (props) => {
       console.log(error);
     }
   };
+  functionsToExport.getTotalSupplyNew = async () => {
+    try {
+      const result = await contractObjects?.stakingContractNew?._totalSupply();
+      console.log(result);
+      return utils?.formatEther(result?.toString());
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   functionsToExport.getRewardRate = async () => {
     try {
       const result = await contractObjects?.stakingContract?.rewardRate();
+      return utils?.formatEther(result?.toString());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  functionsToExport.getRewardRateNew = async () => {
+    try {
+      const result = await contractObjects?.stakingContractNew?.rewardRate();
       return utils?.formatEther(result?.toString());
     } catch (error) {
       console.log(error);
@@ -382,6 +463,21 @@ export const Web3Provider = (props) => {
       toast(`Retreiving Tokens (Placing Transaction)`);
       console.log(account);
       const result = await contractObjects?.stakingContract?.getReward();
+      toast(`Retreiving Tokens (Transaction Placed)`);
+      const newBattleId = await result.wait();
+      toast(`Tokens Retreived`);
+      console.log(result);
+      return result;
+    } catch (e) {
+      console.log(signer);
+      console.log(e);
+    }
+  };
+  functionsToExport.getRewardNew = async () => {
+    try {
+      toast(`Retreiving Tokens (Placing Transaction)`);
+      console.log(account);
+      const result = await contractObjects?.stakingContractNew?.getReward();
       toast(`Retreiving Tokens (Transaction Placed)`);
       const newBattleId = await result.wait();
       toast(`Tokens Retreived`);
@@ -445,6 +541,45 @@ export const Web3Provider = (props) => {
       toast(`Staking Tokens (Placing Transaction)`);
 
       const newBattle = await contractObjects?.stakingContract?.stake(
+        requiredAmount?.toString()
+      );
+      console.log(newBattle);
+      console.log(newBattle.value.toString());
+      toast(`Staking Tokens (Transaction Placed)`);
+
+      const newBattleId = await newBattle.wait();
+      console.log(newBattleId);
+      toast("Tokens Staked!");
+    } catch (e) {
+      toast.error(e?.data?.message || "Transaction Failed");
+      console.log(e);
+    }
+  };
+  functionsToExport.stakeNew = async (amount = 0) => {
+    try {
+      amount = utils.parseEther(amount);
+
+      const requiredAmount = BigNumber.from(amount);
+
+      console.log(requiredAmount.toString());
+      const availableBalance = await contractObjects?.lpContractNew.allowance(
+        account,
+        STAKING_CONTRACT_ADDRESS_NEW
+      );
+      console.log(availableBalance.toString());
+      if (availableBalance.lt(requiredAmount)) {
+        toast(`Increasing Allowance for LP Tokens (Placing Transaction)`);
+
+        const increaseBal =
+          await contractObjects?.lpContractNew.increaseAllowance(
+            STAKING_CONTRACT_ADDRESS_NEW,
+            requiredAmount.mul(1)
+          );
+        const result = await increaseBal.wait();
+      }
+      toast(`Staking Tokens (Placing Transaction)`);
+
+      const newBattle = await contractObjects?.stakingContractNew?.stake(
         requiredAmount?.toString()
       );
       console.log(newBattle);
@@ -525,6 +660,23 @@ export const Web3Provider = (props) => {
       console.log(e);
     }
   };
+  functionsToExport.withdrawNew = async (amount = 0) => {
+    try {
+      const newBattle = await contractObjects?.stakingContractNew?.withdraw(
+        utils.parseEther(amount.toString())?.toString()
+      );
+      console.log(newBattle);
+      console.log(newBattle.value.toString());
+      toast(`Withdrawing Tokens (Transaction Placed)`);
+
+      const newBattleId = await newBattle.wait();
+      console.log(newBattleId);
+      toast("Tokens Withdrawn!");
+    } catch (e) {
+      toast.error(e?.data?.message || "Transaction Failed");
+      console.log(e);
+    }
+  };
   functionsToExport.withdrawSingle = async (amount = 0) => {
     try {
       const newBattle =
@@ -576,12 +728,37 @@ export const Web3Provider = (props) => {
       console.log(e);
     }
   };
+  functionsToExport.rewardPerTokenNew = async () => {
+    try {
+      const newBattle =
+        await contractObjects?.stakingContractNew?.rewardPerToken();
+      return newBattle;
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   functionsToExport.approveStaking = async (amount = 0) => {
     if (!isNaN(amount) && amount > 0) {
       try {
         const result = await contractObjects?.lpContract?.approve(
           STAKING_CONTRACT_ADDRESS,
+          ethers?.utils?.parseEther(amount)
+        );
+        console.log(result);
+        const res = await result.wait();
+        console.log(res.status);
+        return res.status;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+  functionsToExport.approveStakingNew = async (amount = 0) => {
+    if (!isNaN(amount) && amount > 0) {
+      try {
+        const result = await contractObjects?.lpContractNew?.approve(
+          STAKING_CONTRACT_ADDRESS_NEW,
           ethers?.utils?.parseEther(amount)
         );
         console.log(result);
@@ -618,6 +795,10 @@ export const Web3Provider = (props) => {
         tokensStaked,
         reward,
         apr,
+        balanceNew,
+        tokensStakedNew,
+        rewardNew,
+        aprNew,
         balanceSingle,
         tokensStakedSingle,
         rewardsSingle,
