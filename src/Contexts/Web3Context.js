@@ -17,7 +17,7 @@ import lockedStakingAbi from "../Abi/stakingLocked.json";
 
 const Web3Context = createContext();
 
-const RPC_URL = "https://rpc.hermesdefi.io/";
+const RPC_URL = "https://api.harmony.one/";
 // const RPC_URL = "https://api.s0.b.hmny.io"; //testnet
 
 const CHAIN_ID = 1666600000;
@@ -129,7 +129,7 @@ export const Web3Provider = (props) => {
 
   // Initialize contracts on signer change
   useEffect(() => {
-    const _signer = signer;
+    const _signer = signer || new ethers.providers.JsonRpcProvider(RPC_URL);
     try {
       _signer?.getChainId().then((val) => setCorrectChain(val === CHAIN_ID));
     } catch (e) {
@@ -179,6 +179,7 @@ export const Web3Provider = (props) => {
     };
 
     setContractObjects(_contractObjects);
+    console.log(_signer);
   }, [signer]);
 
   // Connect wallet on page load
@@ -191,7 +192,7 @@ export const Web3Provider = (props) => {
     if (account) {
       functionsToExport.fetchStuff();
     }
-  }, [account]);
+  }, [account, signer]);
 
   // Fetch stuff every second
   useEffect(() => {
@@ -205,49 +206,57 @@ export const Web3Provider = (props) => {
   const functionsToExport = {};
 
   functionsToExport.fetchStuff = async () => {
-    const [
-      _balance,
-      _balanceNew,
-      _tokensStaked,
-      _reward,
-      _totalSupply,
-      _rewardRate,
-      _tokensStakedNew,
-      _rewardNew,
-      _totalSupplyNew,
-      _rewardRateNew,
-      _rewardsSingle,
-      _tokensStakedSingle,
-      _balanceSingle,
-      _aprSingle,
-      _tokensStakedLocked,
-    ] = await Promise.all([
-      functionsToExport.getBalance(),
-      functionsToExport.getBalanceNew(),
-      functionsToExport.getTokensStaked(),
-      functionsToExport.getEarned(),
-      functionsToExport.getTotalSupply(),
-      functionsToExport.getRewardRate(),
-      functionsToExport.getTokensStakedNew(),
-      functionsToExport.getEarnedNew(),
-      functionsToExport.getTotalSupplyNew(),
-      functionsToExport.getRewardRateNew(),
-      functionsToExport.getRewardsSingle(),
-      functionsToExport.getTokensStakedSingle(),
-      functionsToExport.getBalanceSingle(),
-      functionsToExport.getAprSingle(),
-      functionsToExport.getTokensStakedLocked(),
-    ]);
-    setBalance(parseFloat(_balance).toFixed(2));
-    setBalanceNew(parseFloat(_balanceNew).toFixed(2));
-    setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
-    setTokensStakedNew(parseFloat(_tokensStakedNew).toFixed(1));
-    setReward(parseFloat(_reward).toFixed(2));
-    setRewardNew(parseFloat(_rewardNew).toFixed(2));
-    const _apr = (_rewardRate * 365) / _totalSupply;
-    const _aprNew = (_rewardRateNew * 365) / _totalSupplyNew;
-    setApr(parseFloat(_apr).toFixed(2));
-    setAprNew(parseFloat(_aprNew).toFixed(2));
+    console.log("Enter fetch");
+    try {
+      const [
+        _balance,
+        _balanceNew,
+        _tokensStaked,
+        _reward,
+        _totalSupply,
+        _rewardRate,
+        _tokensStakedNew,
+        _rewardNew,
+        _totalSupplyNew,
+        _rewardRateNew,
+        _rewardsSingle,
+        _tokensStakedSingle,
+        _balanceSingle,
+        _aprSingle,
+        _tokensStakedLocked,
+        _aprSingleNew,
+      ] = await Promise.all([
+        functionsToExport.getBalance(),
+        functionsToExport.getBalanceNew(),
+        functionsToExport.getTokensStaked(),
+        functionsToExport.getEarned(),
+        functionsToExport.getTotalSupply(),
+        functionsToExport.getRewardRate(),
+        functionsToExport.getTokensStakedNew(),
+        functionsToExport.getEarnedNew(),
+        functionsToExport.getTotalSupplyNew(),
+        functionsToExport.getRewardRateNew(),
+        functionsToExport.getRewardsSingle(),
+        functionsToExport.getTokensStakedSingle(),
+        functionsToExport.getBalanceSingle(),
+        functionsToExport.getAprSingle(),
+        functionsToExport.getTokensStakedLocked(),
+        functionsToExport.getAprSingle(),
+      ]);
+      setBalance(parseFloat(_balance).toFixed(2));
+      setBalanceNew(parseFloat(_balanceNew).toFixed(2));
+      setTokensStaked(parseFloat(_tokensStaked).toFixed(1));
+      setTokensStakedNew(parseFloat(_tokensStakedNew).toFixed(1));
+      setReward(parseFloat(_reward).toFixed(2));
+      setRewardNew(parseFloat(_rewardNew).toFixed(2));
+      const _apr = (_rewardRate * 365) / _totalSupply;
+      const _aprNew = (_rewardRateNew * 365) / _totalSupplyNew;
+      console.log(_rewardRateNew, _totalSupplyNew);
+      setApr(parseFloat(_apr).toFixed(2));
+      setAprNew(parseFloat(_aprNew).toFixed(2));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   functionsToExport.connectWallet = async (defaultAccount = -1) => {
@@ -412,6 +421,7 @@ export const Web3Provider = (props) => {
   };
   functionsToExport.getTotalSupplyNew = async () => {
     try {
+      console.log(contractObjects?.stakingContractNew);
       const result = await contractObjects?.stakingContractNew?._totalSupply();
       console.log(result);
       return utils?.formatEther(result?.toString());
@@ -430,6 +440,7 @@ export const Web3Provider = (props) => {
   };
   functionsToExport.getRewardRateNew = async () => {
     try {
+      console.log(contractObjects?.stakingContractNew);
       const result = await contractObjects?.stakingContractNew?.rewardRate();
       return utils?.formatEther(result?.toString());
     } catch (error) {
