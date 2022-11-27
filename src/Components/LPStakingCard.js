@@ -91,7 +91,7 @@ const LPStakingCard = () => {
     spinState,
     setSpinState,
   }) => {
-    const [openTab, setOpenTab] = React.useState(2);
+    const [openTab, setOpenTab] = React.useState(3);
 
     const handleMaxStake = () => {
       setToStake(balance);

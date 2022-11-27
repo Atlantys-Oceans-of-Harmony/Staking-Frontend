@@ -149,7 +149,7 @@ const LPStakingCardNew = () => {
                 className="flex mb-0 list-none flex-wrap pt-3 flex-row"
                 role="tablist"
               >
-                {/* <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
                   <a
                     className={
                       "text-xs font-bold items-center uppercase py-3 shadow-lg rounded-lg block leading-normal " +
@@ -167,12 +167,12 @@ const LPStakingCardNew = () => {
                   >
                     Stake
                   </a>
-                </li> */}
+                </li>
                 <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
                   <a
                     className={
                       "text-xs font-bold  items-center uppercase py-3 shadow-lg rounded-lg block leading-normal " +
-                      (openTab === 2
+                      (openTab === 3
                         ? "border border-blue-600 text-white bg-gradient-to-l from-cyan-500 to-blue-500"
                         : "border border-blue-600 text-blue-500")
                     }
@@ -417,7 +417,7 @@ const LPStakingCardNew = () => {
                       {parseFloat(reward).toFixed(4)} AQUA
                     </div>
 
-                    {/* <div className="mt-4">
+                    <div className="mt-4">
                       <button
                         class="font-bold text-white inline-flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 rounded text-sm my-2"
                         onClick={handleClaim}
@@ -445,7 +445,7 @@ const LPStakingCardNew = () => {
                           "Claim"
                         )}
                       </button>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
