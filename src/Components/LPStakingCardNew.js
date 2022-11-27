@@ -213,7 +213,7 @@ const LPStakingCardNew = () => {
                         <div className="my-auto">
                           <span className="text-blue-500">Available </span>
                           <span className="ml-2 text-white-600">
-                            {balance} AQUA-ONE LP
+                            {balance} AQUA-ONE LP (SONIC)
                           </span>
                         </div>
                         <div>
@@ -303,7 +303,7 @@ const LPStakingCardNew = () => {
                         <div className="my-auto">
                           <span className="text-blue-500">Staked</span>
                           <span className="ml-2 text-white-600">
-                            {tokensStaked} AQUA-ONE LP
+                            {tokensStaked} AQUA-ONE LP (SONIC)
                           </span>
                         </div>
                         <div>
@@ -367,7 +367,7 @@ const LPStakingCardNew = () => {
             <img src={harmonyImg} className="w-5 h-5 mr-1 mt-1" />
             <img src={aquaImg} className="w-7 h-7 mr-1 z-10 -ml-2" />
 
-            <div className="text-left text-xl font-bold">AQUA/ONE</div>
+            <div className="text-left text-xl font-bold">AQUA/ONE (SONIC)</div>
             <div className="text-left text-md mt-1 ml-2 text-blue-500 font-bold">
               APR {aprNew}%
             </div>
@@ -399,7 +399,7 @@ const LPStakingCardNew = () => {
                   </div>
                   {/* <div className="text-white font-bold text-left">$ 300,000</div> */}
                   <div className="text-white font-bold text-left">
-                    {tokensStaked} Aqua/ONE LP
+                    {tokensStaked} Aqua/ONE LP (SONIC)
                   </div>
                 </div>
               </div>
